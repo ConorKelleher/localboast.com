@@ -1,4 +1,6 @@
 import { useRef } from "react";
+// import storybookUrl from "../assets/storybook-static/index.html?url";
+import classes from "./StorybookBuild.module.sass";
 
 const StorybookBuild = () => {
   const iframeRef = useRef<HTMLIFrameElement | null>();
@@ -18,14 +20,13 @@ const StorybookBuild = () => {
   };
 
   return (
-    <div style={{ position: "relative", width: 1000, height: 700 }}>
-      <iframe ref={onChangeIframe} style={{ height: "100%", width: "100%" }} src="storybook-static/index.html" />
+    <div className={classes.iframeWrapper}>
+      <iframe ref={onChangeIframe} style={{ height: "100%", width: "100%" }} src="assets/storybook-static/index.html" />
       <h1
         ref={(ref) => (errorRef.current = ref)}
         style={{ display: "none", color: "purple", position: "absolute", inset: 0 }}
       >
-        Nothing here. There needs to be a local storybook-static build at project root (ideally symlinked from the other
-        repo)
+        static build at project root (ideally symlinked from the other repo)
       </h1>
     </div>
   );

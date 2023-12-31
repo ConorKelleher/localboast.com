@@ -9,9 +9,6 @@ const accessKeyId = process.env.ACCESS_KEY_ID;
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 /* eslint-enable */
 
-console.log({ bucketName });
-console.log({ accessKeyId });
-console.log({ secretAccessKey });
 const s3Client = new S3Client({
   region: "eu-west-1",
   credentials: {
@@ -63,7 +60,6 @@ function uploadAllFilesInDirectory(directory) {
 }
 
 async function clearBucket() {
-  console.log("about to await listobjects");
   const listCommand = new ListObjectsV2Command({ Bucket: bucketName });
   let hasMore = true;
   const files = [];
@@ -76,8 +72,6 @@ async function clearBucket() {
     hasMore = IsTruncated;
     listCommand.input.ContinuationToken = NextContinuationToken;
   }
-
-  console.log({ files });
 
   await Promise.each(files, (item) => {
     var deleteParams = { Bucket: bucketName, Key: item.Key };
