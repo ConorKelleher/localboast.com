@@ -2,10 +2,7 @@ import useTwitchChat from "Hooks/useTwitchChat";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./styles.module.sass";
 import { LS_KEY_TWITCH_CHANNEL, LS_KEY_TWITCH_USERNAME } from "constants/TwitchConstants";
-import AuthStep from "./components/AuthStep";
-import JoinStep from "./components/JoinStep";
-import LoadStep from "./components/LoadStep";
-import PlayStep from "./components/PlayStep";
+import { AuthStep, JoinStep, LoadStep, PlayStep } from "./components/Steps";
 
 enum Step {
   Loading,
