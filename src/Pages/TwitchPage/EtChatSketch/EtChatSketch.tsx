@@ -1,8 +1,8 @@
-import useTwitchChat from "Hooks/useTwitchChat";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTwitchChat, LS_KEY_TWITCH_CHANNEL } from "localboast";
 import styles from "./styles.module.sass";
-import { LS_KEY_TWITCH_CHANNEL, LS_KEY_TWITCH_USERNAME } from "constants/TwitchConstants";
 import { AuthStep, JoinStep, LoadStep, PlayStep } from "./components/Steps";
+import { TWITCH_CHAT_BOT_CLIENT_ID } from "constants/twitchConstants";
 
 enum Step {
   Loading,
@@ -29,7 +29,7 @@ const EtChatSketch = () => {
     chatJoined,
     chatJoining,
     chatError,
-  } = useTwitchChat();
+  } = useTwitchChat({ botId: TWITCH_CHAT_BOT_CLIENT_ID });
   const activeStep = useMemo<Step>(() => {
     switch (true) {
       case authenticating || chatJoining:
@@ -43,13 +43,6 @@ const EtChatSketch = () => {
     }
   }, [authenticating, chatJoining, chatJoined, username]);
 
-  useEffect(() => {
-    if (username) {
-      localStorage.setItem(LS_KEY_TWITCH_USERNAME, username);
-    } else {
-      localStorage.removeItem(LS_KEY_TWITCH_USERNAME);
-    }
-  }, [username]);
   useEffect(() => {
     if (channel) {
       localStorage.setItem(LS_KEY_TWITCH_CHANNEL, channel);
