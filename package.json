@@ -35,6 +35,8 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "fs": "^0.0.1-security",
     "mime": "^4.0.0",
+    "postcss-preset-mantine": "^1.12.3",
+    "postcss-simple-vars": "^7.0.1",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

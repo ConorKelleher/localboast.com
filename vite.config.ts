@@ -14,6 +14,13 @@ export default defineConfig({
       include: "**/*.svg?react",
     }),
   ],
+  css: {
+    preprocessorOptions: {
+      sass: {
+        additionalData: `@import "./_mantine"\n`,
+      },
+    },
+  },
   server: {
     port: 9999,
     https: true,

@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
-import LogoSVG from "/src/assets/logo_color_wide.svg?react";
 import { Group, Text } from "@mantine/core";
 import DarkSideToggle from "components/DarkSideToggle";
+import HomeIcon from "components/HomeIcon";
 
 const HomePage = () => {
   return (
     <>
       <Group>
         <Link to="/">
-          <LogoSVG height={100} />
+          <HomeIcon />
         </Link>
         <DarkSideToggle />
       </Group>

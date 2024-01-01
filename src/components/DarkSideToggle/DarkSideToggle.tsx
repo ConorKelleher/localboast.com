@@ -29,6 +29,7 @@ const DarkSideToggle = () => {
   return (
     <Switch
       size="lg"
+      checked={colorScheme === "dark"}
       onChange={() => setColorScheme(colorScheme === "light" ? "dark" : "light")}
       onLabel={moonIcon}
       offLabel={sunIcon}
