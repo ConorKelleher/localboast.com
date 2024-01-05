@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import styles from "./styles.module.sass";
 
 interface LoadStepProps {
@@ -7,9 +8,9 @@ interface LoadStepProps {
 }
 const LoadStep = (props: LoadStepProps) => {
   return (
-    <button className={styles.authButton} onClick={props.authenticated ? props.cancelJoin : props.cancelLogin}>
+    <Button className={styles.authButton} onClick={props.authenticated ? props.cancelJoin : props.cancelLogin}>
       Cancel
-    </button>
+    </Button>
   );
 };
 

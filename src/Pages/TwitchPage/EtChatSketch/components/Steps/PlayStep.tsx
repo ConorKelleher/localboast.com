@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import styles from "./styles.module.sass";
 
 interface PlayStepProps {
@@ -23,15 +24,15 @@ const PlayStep = (props: PlayStepProps) => {
           <li key={index}>{message}</li>
         ))}
       </ul>
-      <button className={styles.authButton} onClick={props.clearChats}>
+      <Button className={styles.authButton} onClick={props.clearChats}>
         Clear
-      </button>
-      <button className={styles.authButton} onClick={props.leaveChannel}>
+      </Button>
+      <Button className={styles.authButton} onClick={props.leaveChannel}>
         Leave Channel
-      </button>
-      <button className={styles.authButton} onClick={props.logOut}>
+      </Button>
+      <Button className={styles.authButton} onClick={props.logOut}>
         Log Out
-      </button>
+      </Button>
     </>
   );
 };

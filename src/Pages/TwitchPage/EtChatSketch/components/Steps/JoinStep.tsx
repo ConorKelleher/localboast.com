@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./styles.module.sass";
+import { Button } from "@mantine/core";
 
 interface JoinStepProps {
   chatError: string | null;
@@ -26,12 +27,12 @@ const JoinStep = (props: JoinStepProps) => {
         />
       </div>
       <p className={styles.errorText}>{chatError}</p>
-      <button className={styles.authButton} onClick={() => joinChat(channel || undefined)}>
+      <Button className={styles.authButton} onClick={() => joinChat(channel || undefined)}>
         Join
-      </button>
-      <button className={styles.authButton} onClick={logOut}>
+      </Button>
+      <Button className={styles.authButton} onClick={logOut}>
         Log Out
-      </button>
+      </Button>
     </>
   );
 };

@@ -3,6 +3,7 @@ import { useTwitchChat, LS_KEY_TWITCH_CHANNEL } from "localboast";
 import styles from "./styles.module.sass";
 import { AuthStep, JoinStep, LoadStep, PlayStep } from "./components/Steps";
 import { TWITCH_CHAT_BOT_CLIENT_ID } from "constants/twitchConstants";
+import Panel from "./components/Panel";
 
 enum Step {
   Loading,
@@ -62,30 +63,32 @@ const EtChatSketch = () => {
         }
       }}
     >
-      {activeStep === Step.Loading && (
-        <LoadStep authenticated={authenticated} cancelJoin={disconnectChat!} cancelLogin={logOut} />
-      )}
-      {activeStep === Step.Auth && <AuthStep authenticate={authenticate} />}
-      {activeStep === Step.Join && (
-        <JoinStep
-          chatError={chatError}
-          logOut={logOut}
-          username={username!}
-          channel={channel}
-          joinChat={joinChannel}
-          setChannel={setChannel}
-        />
-      )}
-      {activeStep === Step.Play && (
-        <PlayStep
-          chats={chats}
-          clearChats={clearChats}
-          leaveChannel={leaveChannel!}
-          channel={channel!}
-          username={username!}
-          logOut={logOut}
-        />
-      )}
+      <Panel>
+        {activeStep === Step.Loading && (
+          <LoadStep authenticated={authenticated} cancelJoin={disconnectChat!} cancelLogin={logOut} />
+        )}
+        {activeStep === Step.Auth && <AuthStep authenticate={authenticate} />}
+        {activeStep === Step.Join && (
+          <JoinStep
+            chatError={chatError}
+            logOut={logOut}
+            username={username!}
+            channel={channel}
+            joinChat={joinChannel}
+            setChannel={setChannel}
+          />
+        )}
+        {activeStep === Step.Play && (
+          <PlayStep
+            chats={chats}
+            clearChats={clearChats}
+            leaveChannel={leaveChannel!}
+            channel={channel!}
+            username={username!}
+            logOut={logOut}
+          />
+        )}
+      </Panel>
     </div>
   );
 };

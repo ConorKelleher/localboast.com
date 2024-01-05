@@ -5,8 +5,8 @@ import HomeIcon from "components/HomeIcon";
 
 const HomePage = () => {
   return (
-    <>
-      <Group>
+    <div style={{ padding: 20 }}>
+      <Group style={{ margin: -20, marginBottom: 0 }}>
         <Link to="/">
           <HomeIcon />
         </Link>
@@ -18,7 +18,7 @@ const HomePage = () => {
       <Text style={{ width: 100 }}>This is some paragraph text. I don't know if I should be light or dark</Text>
 
       <div style={{ backgroundColor: "white" }}></div>
-    </>
+    </div>
   );
 };
 
