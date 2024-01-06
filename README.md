@@ -1,27 +1,24 @@
-# React + TypeScript + Vite
+# LocalBoast.com Source Code
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Live Website**: https://LocalBoast.com
 
-Currently, two official plugins are available:
+This source code is provided completely openly as a means of self-documentation and to not have any secrets. This is not meant to be a showcase of best practices nor is it the cleanest my code can be. It is meant to be a functional, at times visually appealing showcase of an end-product, not the means to get there.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+For more insight into my preferred coding style and better documentation habits, have a gander at the associated project ConorKelleher/LocalBoast which provides much of the underlying functionality of this website.
 
-## Expanding the ESLint configuration
+## To Run
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This is a vite app built with typescript. It should function normally by installing dependencies as regular through `yarn` and run locally through `yarn dev`.
 
-- Configure the top-level `parserOptions` property like this:
+There are only two non-standard pieces of this repo (that I can think of at the time of writing):
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+- [push.js](https://github.com/ConorKelleher/localboast.com/blob/main/push.js): This is simply how I deploy the website, authenticating with AWS (using a gitignored `.env` file), clearing the current s3 bucket containing my website and reuploading the new static build.
+- storybook-static: On the topic of static websites, I've done something funky here. The code for this website contains an embedded version of the static build of the storybook app used for development/documentation of the [LocalBoast library](https://github.com/ConorKelleher/localboast). Certain pages of this website embed iframes from that static storybook build. This is done through having the ConorKelleher/LocalBoast repo installed locally and running `yarn build-storybook`. This call not only builds the static storybook code, but copies it over to the `assets` folder of this website. Through this, I can have the output of one local app embedded into the source code of another app. Kinda funky but it works. If you haven't built the storybook static code, the iframes will just show an error message.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+# Usage
+
+Feel free to adapt this code to your own projects or just try building it locally to see how it all works and play around with your own modifications of your own website.
+
+# Issues/Pull Requests
+
+While I'm not really intending for there to be collaboration on this project (as it's a personal portfolio of sorts and not intended to be used as-is by anyone other than me), I will happily entertain any issues or Pull Requests that come in, especially if it's something that I'm not personally invested in and happy to have input on (such as security concerns, performance issues, etc.)
