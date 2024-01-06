@@ -4,6 +4,8 @@ import styles from "./styles.module.sass";
 import { AuthStep, JoinStep, LoadStep, PlayStep } from "./components/Steps";
 import { TWITCH_CHAT_BOT_CLIENT_ID } from "constants/twitchConstants";
 import Panel from "./components/Panel";
+import DebugPanel from "./components/Steps/DebugPanel";
+import { KnobProps } from "./components/Panel/Panel";
 
 enum Step {
   Loading,
@@ -43,6 +45,40 @@ const EtChatSketch = () => {
         return Step.Play;
     }
   }, [authenticating, chatJoining, chatJoined, username]);
+  const knobProps = useMemo(() => {
+    const buttonProps: KnobProps[] = [];
+    switch (activeStep) {
+      case Step.Loading:
+        buttonProps[0] = {
+          buttonText: "Cancel",
+          onClick: logOut,
+        };
+        break;
+      case Step.Auth:
+        break;
+      case Step.Join:
+        buttonProps[0] = {
+          buttonText: "Back",
+          onClick: logOut,
+        };
+        buttonProps[1] = {
+          buttonText: "Start",
+          onClick: () => joinChannel(channel || undefined),
+        };
+        break;
+      case Step.Play:
+        buttonProps[0] = {
+          buttonText: "Back",
+          onClick: leaveChannel!,
+        };
+        buttonProps[1] = {
+          buttonText: "Clear",
+          onClick: clearChats,
+        };
+        break;
+    }
+    return buttonProps;
+  }, [activeStep, channel, clearChats, leaveChannel, joinChannel, logOut]);
 
   useEffect(() => {
     if (channel) {
@@ -63,32 +99,26 @@ const EtChatSketch = () => {
         }
       }}
     >
-      <Panel>
+      <Panel knobProps={knobProps}>
         {activeStep === Step.Loading && (
           <LoadStep authenticated={authenticated} cancelJoin={disconnectChat!} cancelLogin={logOut} />
         )}
         {activeStep === Step.Auth && <AuthStep authenticate={authenticate} />}
         {activeStep === Step.Join && (
-          <JoinStep
-            chatError={chatError}
-            logOut={logOut}
-            username={username!}
-            channel={channel}
-            joinChat={joinChannel}
-            setChannel={setChannel}
-          />
+          <JoinStep chatError={chatError} username={username!} channel={channel} setChannel={setChannel} />
         )}
-        {activeStep === Step.Play && (
-          <PlayStep
-            chats={chats}
-            clearChats={clearChats}
-            leaveChannel={leaveChannel!}
-            channel={channel!}
-            username={username!}
-            logOut={logOut}
-          />
-        )}
+        {activeStep === Step.Play && <PlayStep chats={chats} multiplier={10} />}
       </Panel>
+      {activeStep === Step.Play && (
+        <DebugPanel
+          chats={chats}
+          clearChats={clearChats}
+          leaveChannel={leaveChannel!}
+          channel={channel!}
+          username={username!}
+          logOut={logOut}
+        />
+      )}
     </div>
   );
 };

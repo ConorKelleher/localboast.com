@@ -1,39 +1,47 @@
-import { Button } from "@mantine/core";
-import styles from "./styles.module.sass";
+import { useMemo } from "react";
 
 interface PlayStepProps {
   chats: string[];
-  clearChats: () => void;
-  leaveChannel: () => void;
-  channel: string;
-  username: string;
-  logOut: () => void;
+  multiplier: number;
 }
 
+type Coords = [number, number];
+
+const getNewCoordinateFromMessage = (currentCoords: Coords, multiplier: number, message: string) => {
+  const newCoords: Coords = [...currentCoords];
+  const messageDown = message.toLocaleLowerCase();
+
+  if (messageDown.includes("up")) {
+    newCoords[1] -= multiplier;
+  }
+  if (messageDown.includes("down")) {
+    newCoords[1] += multiplier;
+  }
+  if (messageDown.includes("left")) {
+    newCoords[0] -= multiplier;
+  }
+  if (messageDown.includes("right")) {
+    newCoords[0] += multiplier;
+  }
+
+  return newCoords;
+};
+
 const PlayStep = (props: PlayStepProps) => {
+  const pathD = useMemo(() => {
+    let currentCoords: Coords = [0, 0];
+    return `M${currentCoords[0]} ${currentCoords[1]}${props.chats
+      .map((message) => {
+        currentCoords = getNewCoordinateFromMessage(currentCoords, props.multiplier, message);
+        return `L${currentCoords[0]} ${currentCoords[1]}`;
+      })
+      .join("")}`;
+  }, [props.chats, props.multiplier]);
+  console.log(pathD);
   return (
-    <>
-      <p>
-        Signed in as: <strong>{props.username}</strong>
-      </p>
-      <p>
-        Joined channel: <strong>{props.channel || props.username}</strong>
-      </p>
-      <ul>
-        {props.chats.map((message, index) => (
-          <li key={index}>{message}</li>
-        ))}
-      </ul>
-      <Button className={styles.authButton} onClick={props.clearChats}>
-        Clear
-      </Button>
-      <Button className={styles.authButton} onClick={props.leaveChannel}>
-        Leave Channel
-      </Button>
-      <Button className={styles.authButton} onClick={props.logOut}>
-        Log Out
-      </Button>
-    </>
+    <svg version="1.1" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <path d={pathD} strokeWidth={2} stroke="black" fill="transparent" />
+    </svg>
   );
 };
 
