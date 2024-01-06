@@ -1,5 +1,7 @@
 # LocalBoast.com Source Code
 
+![BannerImage](assets/icons/ColourSolidWide.jpeg)
+
 **Live Website**: https://LocalBoast.com
 
 This source code is provided completely openly as a means of self-documentation and to not have any secrets. This is not meant to be a showcase of best practices nor is it the cleanest my code can be. It is meant to be a functional, at times visually appealing showcase of an end-product, not the means to get there.
