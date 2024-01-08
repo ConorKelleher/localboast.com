@@ -48,7 +48,7 @@ const EtChatSketch = () => {
   const [leftRotation, setLeftRotation] = useState(0);
   const [rightRotation, setRightRotation] = useState(0);
   const [lineCoords, setLineCoords] = useState<Coords[]>([startCoords]);
-  const [multiplier] = useState(10);
+  const [multiplier, setMultiplier] = useState(10);
   const handleNewMessages = useCallback(
     (newMessages: string[]) => {
       setLineCoords((oldCoords) => {
@@ -172,7 +172,7 @@ const EtChatSketch = () => {
         }
       }}
     >
-      <Panel knobProps={knobProps}>
+      <Panel multiplier={multiplier} setMultiplier={setMultiplier} knobProps={knobProps}>
         {activeStep === Step.Loading && (
           <LoadStep authenticated={authenticated} cancelJoin={disconnectChat!} cancelLogin={logOut} />
         )}

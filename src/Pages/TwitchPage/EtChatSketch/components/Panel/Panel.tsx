@@ -12,11 +12,14 @@ import BRSegmentImage from "../assets/BR.png";
 import EtChatSketchTextImage from "../assets/EtChatSketchText.png";
 import Knob from "../Knob";
 import { KnobProps } from "../Knob/Knob";
+import { NumberInput } from "@mantine/core";
 
 export type PanelKnobProps = Omit<KnobProps, "side">;
 
 interface PanelProps extends React.PropsWithChildren {
   knobProps?: PanelKnobProps[];
+  multiplier: number;
+  setMultiplier: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Panel = (props: PanelProps) => {
@@ -31,7 +34,19 @@ const Panel = (props: PanelProps) => {
       <img className={styles.segment} src={TRSegmentImage} role="presentation" />
       <img className={cx(styles.segment, styles.segment_inverse)} src={MRSegmentImage} role="presentation" />
       <div className={styles.child_container}>{props.children}</div>
-      <img className={styles.segment} src={MRSegmentImage} role="presentation" />
+      <div className={styles.middle_right_wrapper}>
+        <img className={styles.segment} src={MRSegmentImage} role="presentation" />
+        <NumberInput
+          className={styles.multiplier_input}
+          label="Multiplier"
+          value={props.multiplier}
+          onChange={(newValue) => props.setMultiplier(parseFloat(newValue as "string"))}
+          step={props.multiplier <= 1 ? 0.1 : 1}
+          min={0.1}
+          max={20}
+          defaultValue={15}
+        />
+      </div>
       <div className={styles.bottom_corner_wrapper}>
         <img className={cx(styles.segment, styles.segment_inverse)} src={BRSegmentImage} role="presentation" />
         <Knob side="left" {...knobProps[0]} />

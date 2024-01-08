@@ -8,15 +8,32 @@
   background-color: #e0e2e1
   border-radius: 29px
 
+  img
+    pointer-events: none
+    -webkit-user-select: none
+    -khtml-user-select: none
+    -moz-user-select: none
+    -o-user-select: none
+    user-select: none
+    -webkit-user-drag: none
+    -khtml-user-drag: none
+    -moz-user-drag: none
+    -o-user-drag: none
+    user-drag: none
+
 .child_container
   max-width: 100%
   max-height: 100%
   overflow: hidden
 
 .top_middle_wrapper,
+.middle_right_wrapper,
 .bottom_middle_wrapper,
 .bottom_corner_wrapper
   position: relative
+  display: flex
+  justify-content: center
+  align-items: center
 
 .etchatsketch_logo
   position: absolute
@@ -25,6 +42,13 @@
   margin: auto
   max-height: 40%
   max-width: 100%
+
+.multiplier_input
+  position: absolute
+  // inset: 0
+  margin: auto
+  > div
+    width: 65px
 
 .localboast_watermark
   position: absolute
