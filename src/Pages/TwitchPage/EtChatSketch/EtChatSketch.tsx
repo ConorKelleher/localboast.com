@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTwitchChat, LS_KEY_TWITCH_CHANNEL } from "localboast";
 import styles from "./styles.module.sass";
 import { AuthStep, JoinStep, LoadStep, PlayStep } from "./components/Steps";
@@ -14,9 +14,54 @@ enum Step {
   Play,
 }
 
+export type Coords = [number, number];
+
+const getNewCoordinateFromMessage = (currentCoords: Coords, multiplier: number, message: string) => {
+  const newCoords: Coords = [...currentCoords];
+  const messageDown = message.toLocaleLowerCase();
+  let hasMoved = false;
+
+  if (messageDown.includes("up")) {
+    newCoords[1] -= multiplier;
+    hasMoved = true;
+  }
+  if (messageDown.includes("down")) {
+    newCoords[1] += multiplier;
+    hasMoved = true;
+  }
+  if (messageDown.includes("left")) {
+    newCoords[0] -= multiplier;
+    hasMoved = true;
+  }
+  if (messageDown.includes("right")) {
+    newCoords[0] += multiplier;
+    hasMoved = true;
+  }
+
+  return hasMoved ? newCoords : null;
+};
+
 const EtChatSketch = () => {
   const iframeContainerRef = useRef<HTMLDivElement | null>(null);
   const [channel, setChannel] = useState<string | null>(localStorage.getItem(LS_KEY_TWITCH_CHANNEL));
+  const [startCoords] = useState<Coords>([0, 0]);
+  const [lineCoords, setLineCoords] = useState<Coords[]>([startCoords]);
+  const [multiplier] = useState(10);
+  const handleNewMessages = useCallback(
+    (newMessages: string[]) => {
+      setLineCoords((oldCoords) => {
+        let updatedCoords = oldCoords;
+        newMessages.forEach((newMessage) => {
+          const newCoords = getNewCoordinateFromMessage(oldCoords[oldCoords.length - 1], multiplier, newMessage);
+          if (newCoords) {
+            updatedCoords = [...updatedCoords, newCoords];
+          }
+        });
+        return updatedCoords;
+      });
+    },
+    [multiplier]
+  );
   const {
     authIFrameRef,
     username,
@@ -32,7 +77,7 @@ const EtChatSketch = () => {
     chatJoined,
     chatJoining,
     chatError,
-  } = useTwitchChat({ botId: TWITCH_CHAT_BOT_CLIENT_ID });
+  } = useTwitchChat({ botId: TWITCH_CHAT_BOT_CLIENT_ID, onMessage: handleNewMessages });
   const activeStep = useMemo<Step>(() => {
     switch (true) {
       case authenticating || chatJoining:
@@ -73,7 +118,10 @@ const EtChatSketch = () => {
         };
         buttonProps[1] = {
           buttonText: "Clear",
-          onClick: clearChats,
+          onClick: () => {
+            clearChats();
+            setLineCoords([]);
+          },
         };
         break;
     }
@@ -107,7 +155,7 @@ const EtChatSketch = () => {
         {activeStep === Step.Join && (
           <JoinStep chatError={chatError} username={username!} channel={channel} setChannel={setChannel} />
         )}
-        {activeStep === Step.Play && <PlayStep chats={chats} multiplier={10} />}
+        {activeStep === Step.Play && <PlayStep lineCoords={lineCoords} />}
       </Panel>
       {activeStep === Step.Play && (
         <DebugPanel

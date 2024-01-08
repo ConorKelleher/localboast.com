@@ -16,6 +16,9 @@ const HomePage = () => {
       <input type="text" placeholder="hi"></input>
 
       <Text style={{ width: 100 }}>This is some paragraph text. I don't know if I should be light or dark</Text>
+      <Text style={{ width: 100, fontStyle: "italic" }}>
+        This is some paragraph text. I don't know if I should be light or dark
+      </Text>
 
       <div style={{ backgroundColor: "white" }}></div>
     </div>

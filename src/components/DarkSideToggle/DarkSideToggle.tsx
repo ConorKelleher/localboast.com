@@ -2,6 +2,7 @@ import { Switch, useMantineColorScheme, useMantineTheme, rem } from "@mantine/co
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
 import { useEffect } from "react";
 import styles from "./styles.module.sass";
+import DarkModeAnimation from "./components/DarkModeAnimation";
 
 const useColorSchemeTransition = () => {
   useEffect(() => {
@@ -27,13 +28,28 @@ const DarkSideToggle = () => {
   );
 
   return (
-    <Switch
-      size="lg"
-      checked={colorScheme === "dark"}
-      onChange={() => setColorScheme(colorScheme === "light" ? "dark" : "light")}
-      onLabel={moonIcon}
-      offLabel={sunIcon}
-    />
+    <div style={{ position: "relative" }}>
+      <Switch
+        size="lg"
+        checked={colorScheme === "dark"}
+        onChange={() => setColorScheme(colorScheme === "light" ? "dark" : "light")}
+        onLabel={moonIcon}
+        offLabel={sunIcon}
+      />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
+          margin: "auto",
+          inset: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <DarkModeAnimation />
+      </div>
+    </div>
   );
 };
 

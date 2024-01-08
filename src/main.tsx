@@ -4,16 +4,13 @@ import "./index.css";
 import "@mantine/core/styles.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RootRouter } from "Routers";
-import { createTheme, MantineProvider } from "@mantine/core";
-
-const theme = createTheme({
-  /** Put your mantine theme override here */
-});
+import { MantineProvider } from "@mantine/core";
+import theme from "theme";
 
 const router = createBrowserRouter(RootRouter);
 
 let appContent = (
-  <MantineProvider theme={theme}>
+  <MantineProvider theme={theme} defaultColorScheme="auto">
     <RouterProvider router={router} />
   </MantineProvider>
 );
