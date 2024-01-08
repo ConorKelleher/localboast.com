@@ -70,9 +70,9 @@ const EtChatSketch = () => {
             if (newCoords[1] !== prevCoords[1]) {
               setRightRotation((oldRotation) => {
                 if (newCoords[1] > prevCoords[1]) {
-                  return oldRotation + multiplier;
-                } else {
                   return oldRotation - multiplier;
+                } else {
+                  return oldRotation + multiplier;
                 }
               });
             }
