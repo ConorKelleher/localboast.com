@@ -11,13 +11,12 @@ import BMSegmentImage from "../assets/BM.png";
 import BRSegmentImage from "../assets/BR.png";
 import EtChatSketchTextImage from "../assets/EtChatSketchText.png";
 import Knob from "../Knob";
+import { KnobProps } from "../Knob/Knob";
 
-export interface KnobProps {
-  buttonText: string;
-  onClick: () => void;
-}
+export type PanelKnobProps = Omit<KnobProps, "side">;
+
 interface PanelProps extends React.PropsWithChildren {
-  knobProps?: KnobProps[];
+  knobProps?: PanelKnobProps[];
 }
 
 const Panel = (props: PanelProps) => {

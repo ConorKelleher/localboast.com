@@ -5,7 +5,7 @@ import { AuthStep, JoinStep, LoadStep, PlayStep } from "./components/Steps";
 import { TWITCH_CHAT_BOT_CLIENT_ID } from "constants/twitchConstants";
 import Panel from "./components/Panel";
 import DebugPanel from "./components/Steps/DebugPanel";
-import { KnobProps } from "./components/Panel/Panel";
+import { PanelKnobProps } from "./components/Panel/Panel";
 
 enum Step {
   Loading,
@@ -45,6 +45,8 @@ const EtChatSketch = () => {
   const iframeContainerRef = useRef<HTMLDivElement | null>(null);
   const [channel, setChannel] = useState<string | null>(localStorage.getItem(LS_KEY_TWITCH_CHANNEL));
   const [startCoords] = useState<Coords>([0, 0]);
+  const [leftRotation, setLeftRotation] = useState(0);
+  const [rightRotation, setRightRotation] = useState(0);
   const [lineCoords, setLineCoords] = useState<Coords[]>([startCoords]);
   const [multiplier] = useState(10);
   const handleNewMessages = useCallback(
@@ -54,6 +56,27 @@ const EtChatSketch = () => {
         newMessages.forEach((newMessage) => {
           const newCoords = getNewCoordinateFromMessage(oldCoords[oldCoords.length - 1], multiplier, newMessage);
           if (newCoords) {
+            const prevCoords = updatedCoords[updatedCoords.length - 1];
+
+            if (newCoords[0] !== prevCoords[0]) {
+              setLeftRotation((oldRotation) => {
+                if (newCoords[0] > prevCoords[0]) {
+                  return oldRotation + multiplier;
+                } else {
+                  return oldRotation - multiplier;
+                }
+              });
+            }
+            if (newCoords[1] !== prevCoords[1]) {
+              setRightRotation((oldRotation) => {
+                if (newCoords[1] > prevCoords[1]) {
+                  return oldRotation + multiplier;
+                } else {
+                  return oldRotation - multiplier;
+                }
+              });
+            }
+
             updatedCoords = [...updatedCoords, newCoords];
           }
         });
@@ -91,10 +114,10 @@ const EtChatSketch = () => {
     }
   }, [authenticating, chatJoining, chatJoined, username]);
   const knobProps = useMemo(() => {
-    const buttonProps: KnobProps[] = [];
+    const newKnobProps: PanelKnobProps[] = [];
     switch (activeStep) {
       case Step.Loading:
-        buttonProps[0] = {
+        newKnobProps[0] = {
           buttonText: "Cancel",
           onClick: logOut,
         };
@@ -102,31 +125,33 @@ const EtChatSketch = () => {
       case Step.Auth:
         break;
       case Step.Join:
-        buttonProps[0] = {
+        newKnobProps[0] = {
           buttonText: "Back",
           onClick: logOut,
         };
-        buttonProps[1] = {
+        newKnobProps[1] = {
           buttonText: "Start",
           onClick: () => joinChannel(channel || undefined),
         };
         break;
       case Step.Play:
-        buttonProps[0] = {
+        newKnobProps[0] = {
           buttonText: "Back",
           onClick: leaveChannel!,
+          rotation: leftRotation,
         };
-        buttonProps[1] = {
+        newKnobProps[1] = {
           buttonText: "Clear",
           onClick: () => {
             clearChats();
             setLineCoords([]);
           },
+          rotation: rightRotation,
         };
         break;
     }
-    return buttonProps;
-  }, [activeStep, channel, clearChats, leaveChannel, joinChannel, logOut]);
+    return newKnobProps;
+  }, [activeStep, channel, clearChats, leaveChannel, joinChannel, logOut, leftRotation, rightRotation]);
 
   useEffect(() => {
     if (channel) {
