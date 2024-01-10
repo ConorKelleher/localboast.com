@@ -43,8 +43,7 @@ const Panel = (props: PanelProps) => {
           onChange={(newValue) => props.setMultiplier(parseFloat(newValue as "string"))}
           step={props.multiplier <= 1 ? 0.1 : 1}
           min={0.1}
-          max={20}
-          defaultValue={15}
+          max={100}
         />
       </div>
       <div className={styles.bottom_corner_wrapper}>
