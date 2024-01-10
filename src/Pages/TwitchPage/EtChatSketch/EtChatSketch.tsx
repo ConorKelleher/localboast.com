@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTwitchChat, LS_KEY_TWITCH_CHANNEL } from "localboast";
 import styles from "./styles.module.sass";
 import { AuthStep, JoinStep, LoadStep, PlayStep } from "./components/Steps";
-import { TWITCH_CHAT_BOT_CLIENT_ID } from "constants/twitchConstants";
+import { LS_ET_CHAT_SKETCH_LINES, TWITCH_CHAT_BOT_CLIENT_ID } from "constants/twitchConstants";
 import Panel from "./components/Panel";
 import DebugPanel from "./components/Steps/DebugPanel";
 import { PanelKnobProps } from "./components/Panel/Panel";
@@ -41,13 +41,27 @@ const getNewCoordinateFromMessage = (currentCoords: Coords, multiplier: number, 
   return hasMoved ? newCoords : null;
 };
 
+const getInitialCoordinateData = (startCoordsFallback: Coords) => {
+  const persistedLinesString = localStorage.getItem(LS_ET_CHAT_SKETCH_LINES);
+  let coords = [startCoordsFallback];
+  if (persistedLinesString) {
+    try {
+      coords = JSON.parse(persistedLinesString);
+    } catch (e) {
+      // Failed to parse persisted drawing, just clear persistence
+      localStorage.removeItem(LS_ET_CHAT_SKETCH_LINES);
+    }
+  }
+  return coords;
+};
+
 const EtChatSketch = () => {
   const iframeContainerRef = useRef<HTMLDivElement | null>(null);
   const [channel, setChannel] = useState<string | null>(localStorage.getItem(LS_KEY_TWITCH_CHANNEL));
   const [startCoords] = useState<Coords>([0, 0]);
   const [leftRotation, setLeftRotation] = useState(0);
   const [rightRotation, setRightRotation] = useState(0);
-  const [lineCoords, setLineCoords] = useState<Coords[]>([startCoords]);
+  const [lineCoords, setLineCoords] = useState<Coords[]>(() => getInitialCoordinateData(startCoords));
   const [multiplier, setMultiplier] = useState(10);
   const handleNewMessages = useCallback(
     (newMessages: string[]) => {
@@ -144,14 +158,19 @@ const EtChatSketch = () => {
           buttonText: "Clear",
           onClick: () => {
             clearChats();
-            setLineCoords([]);
+            setLineCoords([startCoords]);
           },
           rotation: rightRotation,
         };
         break;
     }
     return newKnobProps;
-  }, [activeStep, channel, clearChats, leaveChannel, joinChannel, logOut, leftRotation, rightRotation]);
+  }, [activeStep, channel, startCoords, clearChats, leaveChannel, joinChannel, logOut, leftRotation, rightRotation]);
+
+  // Persist any line changes to LS
+  useEffect(() => {
+    localStorage.setItem(LS_ET_CHAT_SKETCH_LINES, JSON.stringify(lineCoords));
+  }, [lineCoords]);
 
   useEffect(() => {
     if (channel) {
