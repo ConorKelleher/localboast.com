@@ -15,11 +15,21 @@ const PlayStep = (props: PlayStepProps) => {
       })
       .join("")}`;
   }, [props.lineCoords]);
+  const hasDrawnLine = props.lineCoords.length > 1;
 
-  console.log(pathD);
   return (
-    <svg version="1.1" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <path d={pathD} strokeWidth={2} stroke="black" fill="transparent" />
+    <svg
+      style={{ overflow: "visible", padding: 10 }}
+      version="1.1"
+      width="100%"
+      height="100%"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {hasDrawnLine ? (
+        <path d={pathD} strokeWidth={2} stroke="black" fill="transparent" />
+      ) : (
+        <circle rx={props.lineCoords[0][0]} ry={props.lineCoords[0][1]} r={5} />
+      )}
     </svg>
   );
 };
