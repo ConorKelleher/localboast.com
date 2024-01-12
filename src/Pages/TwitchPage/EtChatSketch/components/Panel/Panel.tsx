@@ -13,6 +13,7 @@ import EtChatSketchTextImage from "../assets/EtChatSketchText.png";
 import Knob from "../Knob";
 import { KnobProps } from "../Knob/Knob";
 import { NumberInput } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 export type PanelKnobProps = Omit<KnobProps, "side">;
 
@@ -52,7 +53,9 @@ const Panel = (props: PanelProps) => {
       </div>
       <div className={styles.bottom_middle_wrapper}>
         <img className={styles.segment} src={BMSegmentImage} role="presentation" />
-        <LocalBoastWhiteWideLogo className={styles.localboast_watermark} />
+        <Link to="/">
+          <LocalBoastWhiteWideLogo className={styles.localboast_watermark} />
+        </Link>
       </div>
       <div className={styles.bottom_corner_wrapper}>
         <img className={styles.segment} src={BRSegmentImage} role="presentation" />
