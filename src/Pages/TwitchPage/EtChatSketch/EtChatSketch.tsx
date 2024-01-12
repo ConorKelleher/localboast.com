@@ -114,10 +114,11 @@ const EtChatSketch = () => {
     chatJoined,
     chatJoining,
     chatError,
+    chatReconnecting,
   } = useTwitchChat({ botId: TWITCH_CHAT_BOT_CLIENT_ID, onMessage: handleNewMessages });
   const activeStep = useMemo<Step>(() => {
     switch (true) {
-      case authenticating || chatJoining:
+      case authenticating || chatJoining || chatReconnecting:
         return Step.Loading;
       case !username:
         return Step.Auth;
@@ -126,7 +127,7 @@ const EtChatSketch = () => {
       default:
         return Step.Play;
     }
-  }, [authenticating, chatJoining, chatJoined, username]);
+  }, [authenticating, chatJoining, chatJoined, chatReconnecting, username]);
   const knobProps = useMemo(() => {
     const newKnobProps: PanelKnobProps[] = [];
     switch (activeStep) {
