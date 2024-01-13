@@ -10,19 +10,19 @@ type ToFromColours = {
 const SVG_START_TRANSITION = "transform 1s 0s ease";
 const CONTAINER_START_TRANSITION = "backdrop-filter 0.5s 0s ease, opacity 0.5s 0.5s ease";
 
-const getBackdropFilter = (blurPx: number) => `invert() blur(${blurPx}px)`;
+// const getBackdropFilter = (blurPx: number) => `invert() blur(${blurPx}px)`;
 
 const container = document.createElement("div");
 
 const resetContainerStyles = () => {
-  container.style.backdropFilter = getBackdropFilter(0);
-  container.style.opacity = "1";
+  // container.style.backdropFilter = getBackdropFilter(0);
+  // container.style.opacity = "1";
 };
 container.style.position = "absolute";
 container.style.inset = "0";
 container.style.pointerEvents = "none";
-container.style.clipPath = "url(#lbDarkModeClipPath)";
-container.style.transition = CONTAINER_START_TRANSITION;
+// container.style.clipPath = "url(#lbDarkModeClipPath)";
+// container.style.transition = CONTAINER_START_TRANSITION;
 
 type Shape = "circle" | "rect";
 let shape: Shape = "circle";
@@ -48,12 +48,12 @@ const DarkModeAnimation = () => {
   const positionDivRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    document.body.appendChild(container);
-    const oldTransitionDelay = document.body.style.transitionDelay;
-    document.body.style.transitionDelay = "0.5s";
+    document.querySelector("html")!.appendChild(container);
+    // const oldTransitionDelay = document.body.style.transitionDelay;
+    // document.body.style.transitionDelay = "0.5s";
     return () => {
-      document.body.removeChild(container);
-      document.body.style.transitionDelay = oldTransitionDelay;
+      document.querySelector("html")!.removeChild(container);
+      // document.body.style.transitionDelay = oldTransitionDelay;
     };
   }, []);
 
@@ -61,10 +61,10 @@ const DarkModeAnimation = () => {
     if (!clipPathRef.current || !sizeRef.current) {
       return;
     }
-    const containerTransitionValue = container.style.transition;
+    // const containerTransitionValue = container.style.transition;
     const clipPathTransitionValue = clipPathRef.current.style.transition;
 
-    container.style.transition = "";
+    // container.style.transition = "";
     clipPathRef.current.style.transition = "";
 
     const positionRect = positionDivRef.current!.getBoundingClientRect();
@@ -87,10 +87,10 @@ const DarkModeAnimation = () => {
               Math.min(sizeRef.current.height, sizeRef.current.width))
           })`;
       }
-      container.style.transition = containerTransitionValue;
+      // container.style.transition = containerTransitionValue;
 
-      container.style.opacity = "0";
-      container.style.backdropFilter = getBackdropFilter(5);
+      // container.style.opacity = "0";
+      // container.style.backdropFilter = getBackdropFilter(5);
     });
   }, [sizeRef]);
 
