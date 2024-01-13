@@ -24,13 +24,18 @@ container.style.pointerEvents = "none";
 container.style.clipPath = "url(#lbDarkModeClipPath)";
 container.style.transition = CONTAINER_START_TRANSITION;
 
+type Shape = "circle" | "rect";
+let shape: Shape = "circle";
+
+shape = "rect";
+
 const DarkModeAnimation = () => {
   const { colorScheme } = useMantineColorScheme();
   const theme = useMantineTheme();
   const lightBg = "white";
   const { size, setRef: setSizeRef } = useSize();
   const sizeRef = useUpdatingRef(size);
-  const clipPathRef = useRef<SVGRectElement | null>(null);
+  const clipPathRef = useRef<SVGElement | null>(null);
   const darkBg = theme.colors.dark[7];
   const toFromColours: ToFromColours = useMemo(
     () => ({
@@ -63,7 +68,11 @@ const DarkModeAnimation = () => {
     clipPathRef.current.style.transition = "";
 
     const positionRect = positionDivRef.current!.getBoundingClientRect();
-    const maskInsetAmount = Math.min(sizeRef.current.height, sizeRef.current.width) / 2;
+    // for rect
+    let maskInsetAmount = 0;
+    if (shape === "rect") {
+      maskInsetAmount = Math.min(sizeRef.current.height, sizeRef.current.width) / 2;
+    }
     const newTranslate = `translate(${positionRect.left - maskInsetAmount}px, ${positionRect.top - maskInsetAmount}px)`;
     clipPathRef.current.style.transform = `${newTranslate} scale(0)`;
     resetContainerStyles();
@@ -109,16 +118,29 @@ const DarkModeAnimation = () => {
               <clipPath id="lbDarkModeClipPath">
                 {/* 75% radius enough to completely fill viewport */}
                 {/* <circle cx="50%" cy="50%" r="50%" /> */}
-                <rect
-                  ref={(ref) => (clipPathRef.current = ref)}
-                  style={{
-                    transformOrigin: "center",
-                    transformBox: "fill-box",
-                    transition: SVG_START_TRANSITION,
-                  }}
-                  width={!size ? 100 : Math.min(size.height, size.width)}
-                  height={!size ? 100 : Math.min(size.height, size.width)}
-                />
+                {shape === "rect" && (
+                  <rect
+                    ref={(ref) => (clipPathRef.current = ref)}
+                    style={{
+                      transformOrigin: "center",
+                      transformBox: "fill-box",
+                      transition: SVG_START_TRANSITION,
+                    }}
+                    width={!size ? 100 : Math.min(size.height, size.width)}
+                    height={!size ? 100 : Math.min(size.height, size.width)}
+                  />
+                )}
+                {shape === "circle" && (
+                  <circle
+                    ref={(ref) => (clipPathRef.current = ref)}
+                    style={{
+                      // transformOrigin: "center",
+                      transformBox: "fill-box",
+                      transition: SVG_START_TRANSITION,
+                    }}
+                    r={!size ? 50 : Math.min(size.height, size.width) / 2}
+                  />
+                )}
               </clipPath>
             </defs>
             {/* <circle cx="50%" cy="50%" r="50%" fill="blue" opacity={0.1} /> */}
