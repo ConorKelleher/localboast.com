@@ -2,7 +2,7 @@ import { Switch, useMantineColorScheme, useMantineTheme, rem } from "@mantine/co
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
 import { useEffect } from "react";
 import styles from "./styles.module.sass";
-import DarkModeAnimation from "./components/DarkModeAnimation";
+import useWipe, { Shape } from "./useWipe";
 
 const useColorSchemeTransition = () => {
   useEffect(() => {
@@ -16,50 +16,11 @@ const useColorSchemeTransition = () => {
   }, []);
 };
 
-const stringifyStyles = (styles: CSSStyleDeclaration) => {
-  return Object.values(styles)
-    .map((styleName) => {
-      const styleValue = styles[styleName as keyof typeof styles];
-
-      if (styleValue !== undefined) {
-        return `${styleName}: ${styleValue}`;
-      }
-    })
-    .filter(Boolean)
-    .join("; ");
-};
-
-const applyElStyles = (el: HTMLElement) => {
-  const styles = window.getComputedStyle(el);
-  const styleString = stringifyStyles(styles);
-  if (styleString) {
-    el.setAttribute("style", styleString);
-  }
-};
-
-const removeAllDescendentIds = (node: Node) => {
-  if ("removeAttribute" in node) {
-    const el = node as HTMLElement;
-    el.childNodes.forEach((child) => removeAllDescendentIds(child));
-
-    if (["STYLE", "SCRIPT"].includes(el.tagName)) {
-      // Don't copy any non-display tag (scripts, stylesheets, etc.)
-      node.parentElement?.removeChild(node);
-      return;
-    }
-    el.removeAttribute("id");
-    el.removeAttribute("name");
-    // el.removeAttribute("class");
-    applyElStyles(el);
-    if (el.parentElement?.tagName === "BODY") {
-      el.style.position = "fixed";
-      el.style.inset = "0";
-    }
-  }
-};
-
 const DarkSideToggle = () => {
   const theme = useMantineTheme();
+  const { wipe, positionRef } = useWipe({
+    shape: "https://upload.wikimedia.org/wikipedia/commons/7/78/BlackStar.PNG",
+  });
   useColorSchemeTransition();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
@@ -70,40 +31,17 @@ const DarkSideToggle = () => {
   );
 
   return (
-    <div style={{ position: "relative" }}>
+    <div ref={(ref) => (positionRef.current = ref)}>
       <Switch
         size="lg"
         checked={colorScheme === "dark"}
         onChange={() => {
-          const clone = document.body.cloneNode(true) as HTMLDivElement;
-          clone.style.position = "fixed";
-          clone.style.inset = "0";
-          clone.style.pointerEvents = "none";
-          clone.style.clipPath = "url(#lbDarkModeClipPath)";
-          document.querySelector("html")!.appendChild(clone);
-          removeAllDescendentIds(clone);
-          // debugger;
+          wipe();
           setColorScheme(colorScheme === "light" ? "dark" : "light");
-          setTimeout(() => {
-            document.querySelector("html")!.removeChild(clone);
-          }, 2000);
         }}
         onLabel={moonIcon}
         offLabel={sunIcon}
       />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          margin: "auto",
-          inset: 0,
-          pointerEvents: "none",
-        }}
-      >
-        <DarkModeAnimation />
-      </div>
     </div>
   );
 };
