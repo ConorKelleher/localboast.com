@@ -1,28 +1,18 @@
 import { Switch, useMantineColorScheme, useMantineTheme, rem } from "@mantine/core";
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
-import { useEffect } from "react";
-import styles from "./styles.module.sass";
 import useWipe, { Shape } from "./useWipe";
-
-const useColorSchemeTransition = () => {
-  useEffect(() => {
-    const newClass = styles.transitionTheme;
-    setTimeout(() => {
-      document.body.classList.add(newClass);
-    });
-    return () => {
-      document.body.classList.remove(newClass);
-    };
-  }, []);
-};
+import BlackLogoSVG from "/src/assets/logo_black.svg";
 
 const DarkSideToggle = () => {
   const theme = useMantineTheme();
   const { wipe, positionRef } = useWipe({
-    shape: "https://upload.wikimedia.org/wikipedia/commons/7/78/BlackStar.PNG",
+    // shape: "https://upload.wikimedia.org/wikipedia/commons/7/78/BlackStar.PNG",
+    // shape: BlackLogoSVG,
+    shape: Shape.Circle,
+    // shape: Shape.Square,
+    ms: 5000,
   });
-  useColorSchemeTransition();
-  const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const { colorScheme, setColorScheme } = useMantineColorScheme({ keepTransitions: true });
 
   const sunIcon = <IconSun style={{ width: rem(16), height: rem(16) }} stroke={2.5} color={theme.colors.yellow[4]} />;
 

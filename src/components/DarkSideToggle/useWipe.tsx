@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import { generateRandomId, useSize, UseSizeSize, useUpdatingRef } from "localboast";
+import { cx, generateRandomId, useSize, UseSizeSize, useUpdatingRef } from "localboast";
 
 const getSVGForegroundTransition = (ms: number) => `transition: transform ${ms / 1000}s 0s ease-in-out`;
 const getSVGBackgroundTransition = (ms: number) => `transition: opacity ${ms / 2000}s ${ms / 2000}s ease-in-out`;
@@ -18,13 +18,17 @@ const getSVGContainer = () => {
   return container;
 };
 
+const getSVGViewBox = (size: UseSizeSize | null) => `0 0 ${size?.width || 100} ${size?.height || 100}`;
+const getSVGRectDimensions = (size: UseSizeSize | null) => `${!size ? 100 : Math.min(size.height, size.width)}px`;
+const getSVGCircleRadius = (size: UseSizeSize | null) => `${!size ? 50 : Math.min(size.height, size.width) / 2}px`;
+
 const getNewSVG = (size: UseSizeSize | null, options: UseWipeOptions, wipeId: string) => {
   const newSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   newSVG.setAttribute("id", `lbWipeMaskSVG_${wipeId}`);
   newSVG.setAttribute("width", "100%");
   newSVG.setAttribute("height", "100%");
   newSVG.setAttribute("version", "1.1");
-  newSVG.setAttribute("viewBox", `0 0 ${size?.width || 100} ${size?.height || 100}`);
+  newSVG.setAttribute("viewBox", getSVGViewBox(size));
   newSVG.setAttribute("xmlns", "http://www.w3.org/2000/svg");
   const shape = options.shape;
   const ms = options.ms || DEFAULT_OPTIONS.ms;
@@ -35,14 +39,18 @@ const getNewSVG = (size: UseSizeSize | null, options: UseWipeOptions, wipeId: st
   <mask id="lbWipeMask_${wipeId}">
     <rect width="100%" height="100%" fill="white" style="${getSVGBackgroundTransition(ms)}" />
     <${shapeTagName}
-      id="lbWipeMaskShape_${wipeId}
       fill="black"
-      style="transform: scale(0); ${
-        shape !== Shape.Circle ? "transform-origin: center; " : ""
-      }transform-box: fill-box; ${getSVGForegroundTransition(ms)}"
-      ${shape !== Shape.Circle ? `width="${!size ? 100 : Math.min(size.height, size.width)}px"` : ""}
-      ${shape !== Shape.Circle ? `height="${!size ? 100 : Math.min(size.height, size.width)}px"` : ""}
-      ${shape === Shape.Circle ? `r="${!size ? 50 : Math.min(size.height, size.width) / 2}px"` : ""}
+      style="${cx(
+        "transform: scale(0);",
+        {
+          "transform-origin: center;": shape !== Shape.Circle,
+          "transform-box: fill-box;": shape !== Shape.Circle,
+        },
+        getSVGForegroundTransition(ms)
+      )}"
+      ${shape !== Shape.Circle ? `width="${getSVGRectDimensions(size)}"` : ""}
+      ${shape !== Shape.Circle ? `height="${getSVGRectDimensions(size)}"` : ""}
+      ${shape === Shape.Circle ? `r="${getSVGCircleRadius(size)}"` : ""}
       ${isCustomSVGShape ? `href="${shape}"` : ""}
     />
   </mask>
@@ -117,13 +125,14 @@ const useWipe = (options?: UseWipeOptions) => {
     setSizeRef(svgContainer);
     document.querySelector("html")!.appendChild(svgContainer);
     return () => {
-      // document.querySelector("html")!.removeChild(svgContainer);
+      document.querySelector("html")!.removeChild(svgContainer);
     };
   }, [setSizeRef]);
 
   const setupCloneRef = useRef((wipeId: string) => {
     const clone = document.body.cloneNode(true) as HTMLDivElement;
     clone.style.position = "fixed";
+    clone.style.zIndex = "1";
     clone.style.inset = "0";
     clone.style.pointerEvents = "none";
     clone.style.mask = `url(#lbWipeMask_${wipeId})`;
@@ -143,7 +152,9 @@ const useWipe = (options?: UseWipeOptions) => {
 
   const setupSVGRef = useRef((wipeId: string) => {
     const newSVG = getNewSVG(sizeRef.current, mergedOptionsRef.current, wipeId);
+
     svgContainerRef.current.appendChild(newSVG);
+
     setTimeout(() => {
       svgContainerRef.current.removeChild(newSVG);
     }, mergedOptionsRef.current.ms);
@@ -187,15 +198,17 @@ const useWipe = (options?: UseWipeOptions) => {
     maskShapeEl.style.transform = `${newTranslate} scale(0)`;
     maskBackgroundEl.style.opacity = "1";
     setTimeout(() => {
-      if (sizeRef.current) {
-        maskShapeEl.style.transition = maskShapeTransition;
-        maskShapeEl.style.transform =
-          maskShapeEl.style.transform.replace(/scale\([^)]\)/, "") +
-          `scale(${2.5 * (largestPageDimension / smallestPageDimension)})`;
+      maskShapeEl.style.transition = maskShapeTransition;
+      maskBackgroundEl.style.transition = maskBackgroundTransition;
+      setTimeout(() => {
+        // todo - make this 2.5 value optional + get a better understanding of why it's needed
+        const fullPageScale = 2.5 * (largestPageDimension / smallestPageDimension);
+        const oldTransform = maskShapeEl.style.transform;
+        const newTransform = oldTransform.replace(/scale\([^)]+\)/, "") + `scale(${fullPageScale})`;
 
-        maskBackgroundEl.style.transition = maskBackgroundTransition;
+        maskShapeEl.style.transform = newTransform;
         maskBackgroundEl.style.opacity = "0";
-      }
+      });
     });
   });
 
