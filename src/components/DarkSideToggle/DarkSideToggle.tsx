@@ -1,7 +1,7 @@
 import { Switch, useMantineColorScheme, useMantineTheme, rem } from "@mantine/core";
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
 import useWipe, { Shape } from "./useWipe";
-import BlackLogoSVG from "/src/assets/logo_black.svg";
+// import BlackLogoSVG from "/src/assets/logo_black.svg";
 
 const DarkSideToggle = () => {
   const theme = useMantineTheme();
