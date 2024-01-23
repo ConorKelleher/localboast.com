@@ -1,0 +1,15 @@
+.body_box
+  z-index: 1
+  position: relative
+  background-color: inherit
+  min-height: calc((var(--vh, 1vh) * 100) - var(--header-height))
+  width: 100%
+  display: flex
+
+  &::before
+    content: " "
+    pointer-events: none
+    position: absolute
+    inset: 0
+    left: -50px
+    box-shadow: 25px 12px 12px -12px grey

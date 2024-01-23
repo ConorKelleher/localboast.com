@@ -283,13 +283,21 @@
   font-family: "Urbanist";
 }
 
+html {
+  /* overflow-x: hidden; */
+}
+
 #root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
+  position: relative;
+  overflow: auto;
+
+  background-color: inherit;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -312,9 +320,8 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   transition: none;
-  overflow: hidden;
 }
 
 h1 {

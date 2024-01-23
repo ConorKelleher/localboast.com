@@ -1,0 +1,36 @@
+.footer
+  // max-height and overflow to allow footer scroll on very small screens
+  max-height: calc(var(--vh, 1vh) * 100)
+  overflow: auto
+
+  position: sticky
+  inset: 0
+  top: unset
+  z-index: 0
+  // display: grid
+  padding: 25px 0
+  display: flex
+  flex-wrap: wrap
+  gap: 30px
+  padding: 30px
+  // grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+
+  > div
+    // 201 empircally based on "Tip Me Live on Stream!"
+    width: 201px
+    white-space: nowrap
+    display: flex
+    margin: 0 auto
+  
+  @media (max-width: $mantine-breakpoint-xs)
+    > div
+      width: 100px
+      white-space: unset
+
+.footer_anchor
+  display: flex
+  align-items: center
+  gap: 15px
+
+  svg
+    height: 30px

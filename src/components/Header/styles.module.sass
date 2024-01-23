@@ -1,0 +1,13 @@
+.header
+  z-index: 2
+  padding: 20px
+  position: sticky
+  top: 0
+  background-color: var(--header-bg-color, var(--mantine-color-body))
+  &::before
+    content: " "
+    pointer-events: none
+    position: absolute
+    inset: 0
+    left: -50px
+    box-shadow: 25px 12px 12px -12px grey
