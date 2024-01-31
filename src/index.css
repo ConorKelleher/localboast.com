@@ -297,8 +297,6 @@ html {
   position: relative;
   overflow: auto;
 
-  background-color: inherit;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

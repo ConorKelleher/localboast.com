@@ -7,7 +7,18 @@
   &::before
     content: " "
     pointer-events: none
+    opacity: var(--header-shadow-opacity, 1)
     position: absolute
     inset: 0
     left: -50px
     box-shadow: 25px 12px 12px -12px grey
+
+.headerIcon
+  height: 40px
+  width: auto
+
+  @media (max-width: $mantine-breakpoint-xs)
+    height: 20px
+
+  a
+    height: fit-content

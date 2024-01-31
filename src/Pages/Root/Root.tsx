@@ -1,17 +1,12 @@
-import Footer from "components/Footer/Footer";
-import Body from "components/Body";
-import Header from "components/Header";
+import PageWrapper from "Pages/PageWrapper/PageWrapper";
 import { Outlet } from "react-router-dom";
 
+export const UnwrappedRoot = () => <Outlet />;
+
 const Root = () => (
-  <>
-    <Header />
-    <Body>
-      {" "}
-      <Outlet />
-    </Body>
-    <Footer />
-  </>
+  <PageWrapper>
+    <UnwrappedRoot />
+  </PageWrapper>
 );
 
 export default Root;

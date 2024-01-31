@@ -4,6 +4,8 @@ import TwitchLogo from "/src/assets/twitch_logo.svg?react";
 import KoFiLogo from "/src/assets/ko-fi_logo.svg?react";
 import styles from "./styles.module.sass";
 import React, { forwardRef } from "react";
+import * as LINKS from "constants/lbLinks";
+import getCopy from "constants/localisation";
 
 interface FooterAnchorProps extends React.PropsWithChildren {
   href?: string;
@@ -22,12 +24,12 @@ const Footer = forwardRef<HTMLDivElement | null>((_props, ref) => {
         <Text size="md" fw="700">
           Contact
         </Text>
-        <FooterAnchor href="mailto:localboast@outlook.com">Email</FooterAnchor>
-        <FooterAnchor href="https://discord.gg/3pT3w7DT">Discord</FooterAnchor>
+        <FooterAnchor href={LINKS.MAILTO}>{getCopy("email")}</FooterAnchor>
+        <FooterAnchor href={LINKS.DISCORD}>{getCopy("discord")}</FooterAnchor>
       </Stack>
       <Stack>
         <Text size="md" fw="700">
-          Ts&Cs
+          {getCopy("tsAndCs")}
         </Text>
         <FooterAnchor>To-Do</FooterAnchor>
         <FooterAnchor>I swear</FooterAnchor>
@@ -37,26 +39,26 @@ const Footer = forwardRef<HTMLDivElement | null>((_props, ref) => {
         <Text size="md" fw="700">
           Other Resources
         </Text>
-        <FooterAnchor href="https://github.com/ConorKelleher/localboast">GitHub - Library</FooterAnchor>
-        <FooterAnchor href="https://github.com/ConorKelleher/localboast.com">GitHub - Website</FooterAnchor>
-        <FooterAnchor href="https://www.youtube.com/channel/UCt-IaL4qQsOU6_rbS7zky1Q/live">YouTube</FooterAnchor>
-        <FooterAnchor href="https://twitch.tv/Localboast1">Twitch</FooterAnchor>
+        <FooterAnchor href={LINKS.LIB_REPO}>{getCopy("githubLib")}</FooterAnchor>
+        <FooterAnchor href={LINKS.SITE_REPO}>{getCopy("githubSite")}</FooterAnchor>
+        <FooterAnchor href={LINKS.YOUTUBE}>{getCopy("youtube")}</FooterAnchor>
+        <FooterAnchor href={LINKS.TWITCH}>{getCopy("twitch")}</FooterAnchor>
       </Stack>
       <Stack>
         <Text size="md" fw="700">
-          Support This Project
+          {getCopy("support")}
         </Text>
-        <FooterAnchor href="https://www.patreon.com/LocalBoast">
+        <FooterAnchor href={LINKS.PATREON}>
           <PatreonLogo />
-          Become a Patron
+          {getCopy("becomeAPatron")}
         </FooterAnchor>
-        <FooterAnchor href="https://streamelements.com/localboast1/tip">
+        <FooterAnchor href={LINKS.SE_TIP}>
           <TwitchLogo />
-          Tip Me Live on Stream!
+          {getCopy("tipOnSE")}
         </FooterAnchor>
-        <FooterAnchor href="https://ko-fi.com/localboast">
+        <FooterAnchor href={LINKS.KO_FI}>
           <KoFiLogo />
-          Buy Me a Ko-Fi
+          {getCopy("buyKoFi")}
         </FooterAnchor>
       </Stack>
     </Box>
