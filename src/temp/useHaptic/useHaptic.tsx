@@ -9,8 +9,6 @@ export interface UseHapticOptions {
   returnMs?: number;
   focusScale?: number;
   clickScale?: number;
-  clickDelay?: number;
-  returnDelay?: number;
   onClick?: (e?: InteractionEvent) => void;
   events?: {
     focus?: boolean;
@@ -18,14 +16,12 @@ export interface UseHapticOptions {
   };
 }
 export const DEFAULT_USE_HAPTIC_OPTIONS: UseHapticOptions = {
-  focusMs: 0.3,
-  blurMs: 0.3,
-  clickMs: 0.05,
-  returnMs: 0.05,
+  focusMs: 300,
+  blurMs: 300,
+  clickMs: 50,
+  returnMs: 50,
   focusScale: 1.07,
   clickScale: 0.95,
-  clickDelay: 50,
-  returnDelay: 0,
   events: {
     focus: true,
     click: true,
@@ -83,8 +79,8 @@ const useHaptic = (options?: UseHapticOptions) => {
         unclickTimeoutRef.current = setTimeout(() => {
           setReturning(false);
           unclickTimeoutRef.current = undefined;
-        }, mergedOptionsRef.current.returnDelay);
-      }, mergedOptionsRef.current.clickDelay);
+        }, mergedOptionsRef.current.returnMs);
+      }, mergedOptionsRef.current.clickMs);
     },
     [mergedOptionsRef]
   );
@@ -94,7 +90,7 @@ const useHaptic = (options?: UseHapticOptions) => {
       style: useMemo(
         () => ({
           transform: `scale(${scale})`,
-          transition: `all ${transitionMs}s ease`,
+          transition: `all ${transitionMs / 1000}s ease`,
         }),
         [scale, transitionMs]
       ),

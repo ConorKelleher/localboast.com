@@ -3,44 +3,24 @@ import LogoSVG from "/src/assets/logo_color.svg?react";
 import LogoWideSVG from "/src/assets/logo_color_wide.svg?react";
 import styles from "./styles.module.sass";
 import { cx } from "localboast";
-import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Paths from "Paths";
+import useHaptic from "temp/useHaptic";
 
 const HomeIcon = () => {
   const { colorScheme } = useMantineColorScheme();
-  const [clicked, setClicked] = useState(false);
-  const [returning, setReturning] = useState(false);
-  const unclickTimeoutRef = useRef<NodeJS.Timeout>();
   const navigate = useNavigate();
 
-  const onClick = () => {
-    setClicked(true);
-    setReturning(false);
-    if (unclickTimeoutRef.current) {
-      clearTimeout(unclickTimeoutRef.current);
-    }
-    navigate("/");
-
-    unclickTimeoutRef.current = setTimeout(() => {
-      setClicked(false);
-      setReturning(true);
-      unclickTimeoutRef.current = setTimeout(() => {
-        setReturning(false);
-        unclickTimeoutRef.current = undefined;
-      }, 100);
-    }, 100);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (unclickTimeoutRef.current) {
-        clearTimeout(unclickTimeoutRef.current);
-      }
-    };
-  }, []);
+  const [{ onClick: hapticOnClick }, { returning, clicked }] = useHaptic({
+    clickMs: 100,
+    returnMs: 100,
+    onClick: () => {
+      navigate(Paths.HomePage);
+    },
+  });
 
   return (
-    <UnstyledButton onClick={onClick} className={styles.logoButton}>
+    <UnstyledButton onClick={hapticOnClick} className={styles.logoButton}>
       <Group wrap="nowrap" className={styles.logoContainer}>
         <LogoSVG
           className={cx(styles.logoKey, {

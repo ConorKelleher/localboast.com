@@ -1,6 +1,6 @@
 import { Group, darken, rgba, useMantineColorScheme } from "@mantine/core";
-import DarkSideToggle from "components/DarkSideToggle";
-import HomeIcon from "components/HomeIcon";
+import DarkSideToggle from "./components/DarkSideToggle";
+import HomeIcon from "./components/HomeIcon";
 import { useSize, useUpdatingRef } from "localboast";
 import { useEffect } from "react";
 import { LB_COLORS } from "theme";
