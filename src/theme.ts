@@ -1,4 +1,4 @@
-import { Anchor, MantineColorsTuple, Menu, createTheme } from "@mantine/core";
+import { Anchor, MantineColorsTuple, Menu, createTheme, darken } from "@mantine/core";
 
 export const LB_COLORS: { [color: string]: string } = {
   boastfulYellow: "#ffca43",
@@ -7,8 +7,10 @@ export const LB_COLORS: { [color: string]: string } = {
   boastfulRed: "#e85f5c",
   boastfulPurple: "#3b1e51",
 };
-LB_COLORS.lightIcons = LB_COLORS.boastfulPurple;
-LB_COLORS.darkIcons = LB_COLORS.boastfulYellow;
+LB_COLORS.lightHeaderIcons = LB_COLORS.boastfulPurple;
+LB_COLORS.darkHeaderIcons = LB_COLORS.boastfulYellow;
+LB_COLORS.lightFooterIcons = LB_COLORS.boastfulPurple;
+LB_COLORS.darkFooterIcons = LB_COLORS.boastfulBlue;
 
 // All generated from the base branding colour scheme with https://mantine.dev/colors-generator
 const LB_COLOR_PALETTES: { [color: string]: MantineColorsTuple } = {
@@ -38,12 +40,12 @@ const LB_COLOR_PALETTES: { [color: string]: MantineColorsTuple } = {
     "#7740a1",
     "#6a3890",
     "#3b1e51",
-    "#3b1e51",
-    "#3b1e51",
+    darken("#3b1e51", 0.1),
+    darken("#3b1e51", 0.2),
   ],
 };
 
-const theme = createTheme({
+export const appTheme = createTheme({
   /** Put your mantine theme override here */
   fontFamily: "Urbanist",
   primaryColor: "boastful-blue",
@@ -60,6 +62,7 @@ const theme = createTheme({
     Anchor: Anchor.extend({
       defaultProps: {
         underline: "never",
+        fw: "bolder",
       },
     }),
     "Menu.Dropdown": Menu.Dropdown.extend({
@@ -71,5 +74,3 @@ const theme = createTheme({
     }),
   },
 });
-
-export default theme;

@@ -2,62 +2,63 @@ import ErrorPage from "Pages/ErrorPage/ErrorPage";
 import HomePage from "Pages/HomePage";
 import InProgressPage from "Pages/InProgressPage";
 import LivePage from "Pages/LivePage/LivePage";
-import EtChatSketch from "Pages/LivePage/Page/LiveUtilsPage/EtChatSketch";
-import LiveUtilsPage from "Pages/LivePage/Page/LiveUtilsPage/LiveUtilsPage";
-import TwitchPage from "Pages/LivePage/Page/TwitchPage";
-import YouTubePage from "Pages/LivePage/Page/YouTubePage/YouTubePage";
+import EtChatSketch from "Pages/LivePage/Pages/LiveUtilsPage/EtChatSketch";
+import LiveUtilsPage from "Pages/LivePage/Pages/LiveUtilsPage/LiveUtilsPage";
+import TwitchPage from "Pages/LivePage/Pages/TwitchPage";
+import YouTubePage from "Pages/LivePage/Pages/YouTubePage/YouTubePage";
 import Root from "Pages/Root";
 import { UnwrappedRoot } from "Pages/Root/Root";
 import StorybookPage from "Pages/StorybookPage";
 import TwitchAuthPage from "Pages/TwitchAuthPage";
+import Paths from "Paths";
 
 export const RootRouter = [
   {
-    path: "/",
+    path: Paths.Root,
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
+        path: Paths.HomePage,
         element: <HomePage />,
       },
       {
-        path: "docs",
+        path: Paths.StorybookPage,
         element: <StorybookPage />,
       },
       {
-        path: "live",
+        path: Paths.LivePage,
         element: <LivePage />,
       },
       {
-        path: "wip",
+        path: Paths.InProgressPage,
         element: <InProgressPage />,
       },
       {
-        path: "live/YouTube",
+        path: Paths.YouTubePage,
         element: <YouTubePage />,
       },
       {
-        path: "live/utils",
+        path: Paths.LiveUtilsPage,
         element: <LiveUtilsPage />,
       },
       {
-        path: "live/twitch",
+        path: Paths.TwitchPage,
         element: <TwitchPage />,
       },
       {
-        path: "twitch_auth",
+        path: Paths.TwitchAuthPage,
         element: <TwitchAuthPage />,
       },
     ],
   },
   {
-    path: "apps",
+    path: Paths.UnwrappedRoot,
     element: <UnwrappedRoot />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "sketch",
+        path: Paths.EtChatSketch,
         element: <EtChatSketch />,
       },
     ],

@@ -1,7 +1,10 @@
 import { Anchor, Stack, Text } from "@mantine/core";
 import PageWrapper from "Pages/PageWrapper/PageWrapper";
+import usePageTitle from "temp/usePageTitle";
 
 const ErrorPage = () => {
+  usePageTitle("404 | LocalBoast");
+
   return (
     <PageWrapper>
       <Stack align="center" justify="center" style={{ width: "100%" }}>

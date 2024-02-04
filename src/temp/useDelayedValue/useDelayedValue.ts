@@ -1,11 +1,11 @@
 import { useUpdatingRef } from "localboast";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-interface UseDelayOptions {
+export interface UseDelayedValueOptions {
   delay: number;
   immediateIf?: (value: unknown) => boolean;
 }
-export const useDelayedValue = <T>(value: T, options: UseDelayOptions) => {
+const useDelayedValue = <T>(value: T, options: UseDelayedValueOptions) => {
   const [storedValue, setStoredValue] = useState(value);
   const timeoutRef = useRef<NodeJS.Timeout>();
   const lastValueRef = useRef(value);

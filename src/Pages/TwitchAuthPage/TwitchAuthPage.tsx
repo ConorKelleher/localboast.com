@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "qs";
 import { LS_KEY_TWITCH_AUTH_TOKEN, LS_KEY_TWITCH_CSRF_TOKEN } from "localboast";
+import usePageTitle from "temp/usePageTitle";
 
 const TwitchAuthPage = () => {
   const location = useLocation();
+  usePageTitle("Authenticating | LocalBoast");
   const { access_token, state } = qs.parse(location.hash.slice(1));
   const csrfToken = useMemo(() => localStorage.getItem("twitch_auth_uid"), []);
   const [error, setError] = useState(
@@ -12,8 +14,6 @@ const TwitchAuthPage = () => {
       ? null
       : "Error: No access_token hash found in url. Authentication failed I guess todo: add actual error handling"
   );
-  console.log(location.search);
-  console.log(access_token);
 
   useEffect(() => {
     if (access_token && typeof access_token === "string") {

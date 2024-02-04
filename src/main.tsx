@@ -5,8 +5,9 @@ import "@mantine/core/styles.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RootRouter } from "Routers";
 import { MantineProvider } from "@mantine/core";
-import theme from "theme";
+import { appTheme } from "theme";
 import { attachCustomVH } from "localboast";
+import { Notifications } from "@mantine/notifications";
 
 // Set up custom VH + resize detection so mobile sizes correctly
 attachCustomVH();
@@ -14,7 +15,8 @@ attachCustomVH();
 const router = createBrowserRouter(RootRouter);
 
 let appContent = (
-  <MantineProvider theme={theme} defaultColorScheme="auto">
+  <MantineProvider theme={appTheme} defaultColorScheme="auto">
+    <Notifications />
     <RouterProvider router={router} />
   </MantineProvider>
 );

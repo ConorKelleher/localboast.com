@@ -14,6 +14,7 @@ import Knob from "../Knob";
 import { KnobProps } from "../Knob/Knob";
 import { NumberInput } from "@mantine/core";
 import { Link } from "react-router-dom";
+import Paths from "Paths";
 
 export type PanelKnobProps = Omit<KnobProps, "side">;
 
@@ -53,7 +54,7 @@ const Panel = (props: PanelProps) => {
       </div>
       <div className={styles.bottom_middle_wrapper}>
         <img className={styles.segment} src={BMSegmentImage} role="presentation" />
-        <Link to="/">
+        <Link to={Paths.HomePage}>
           <LocalBoastWhiteWideLogo className={styles.localboast_watermark} />
         </Link>
       </div>
