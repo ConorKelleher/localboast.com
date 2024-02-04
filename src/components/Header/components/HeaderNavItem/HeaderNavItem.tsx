@@ -66,7 +66,8 @@ const localAnchorProps = {
   ...sharedAnchorProps,
   component: Link,
 };
-const MENU_OPEN_DELAY = 0;
+const MENU_OPEN_DELAY = 300;
+const MENU_ITEM_REVEAL_DELAY = MENU_OPEN_DELAY + 600;
 
 const HeaderNavItem = (props: HeaderNavItemProps) => {
   const mergedProps = {
@@ -94,8 +95,11 @@ const HeaderNavItem = (props: HeaderNavItemProps) => {
   };
   const [hapticProps] = useHaptic();
 
-  const [showMenu] = useDelayedValue(controlledOpen, { delay: 200, immediateIf: (value) => !value });
-  const [showMenuItems] = useDelayedValue(controlledOpen, { delay: 800, immediateIf: (value) => !value });
+  const [showMenu] = useDelayedValue(controlledOpen, { delay: MENU_OPEN_DELAY, immediateIf: (value) => !value });
+  const [showMenuItems] = useDelayedValue(controlledOpen, {
+    delay: MENU_ITEM_REVEAL_DELAY,
+    immediateIf: (value) => !value,
+  });
   let content = (
     <Box {...hapticProps}>
       {/* TS build doesn't like polymorphic props */}
@@ -136,7 +140,7 @@ const HeaderNavItem = (props: HeaderNavItemProps) => {
         trigger="click-hover"
         transitionProps={{ transition: "pop", duration: 200 }}
         opened={showMenu} // our controlled value doesn't handle moving mouse outside trigger. If we need menu access, use the uncontrolled value. If we don't, use the controlled one and close on move mouse
-        openDelay={MENU_OPEN_DELAY}
+        openDelay={0} // we controll the open value delay ourselves
         onChange={setControlledOpen}
         classNames={{
           label: styles.menuLabel,
