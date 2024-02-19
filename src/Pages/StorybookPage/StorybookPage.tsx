@@ -3,7 +3,7 @@ import styles from "./styles.module.sass";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import usePageTitle from "temp/usePageTitle";
-import capitalize from "temp/capitalize";
+import { capitalize } from "localboast";
 
 const baseUrl = "assets/storybook-static/index.html";
 
@@ -16,7 +16,7 @@ const getCodebaseTitleFromQuery = (query: string) => {
     if (storyContext) {
       const [module, storyName] = storyContext.split("--");
       const moduleTitleSegments = module.split("-");
-      debugger;
+
       if (moduleTitleSegments[1]) {
         title += `${moduleTitleSegments[1]}`;
       }
