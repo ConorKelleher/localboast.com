@@ -2,10 +2,12 @@ import { Anchor, Center, Stack, Text, Title } from "@mantine/core";
 import styles from "./styles.module.sass";
 import * as LINKS from "constants/lbLinks";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { AnimatedText, useUpdatingRef } from "localboast";
+import { useState } from "react";
+import AnimatedText from "localboast/components/AnimatedText";
+import useInterval from "localboast/hooks/useInterval";
 import Paths from "Paths";
 import usePageTitle from "temp/usePageTitle";
+// import CodeShoutout from "./components/CodeShoutout";
 
 const TITLE_TEXTS = [
   { title: "Work in progress.", time: 2500 },
@@ -17,21 +19,6 @@ const TITLE_TEXTS = [
   { title: "Work In-Progress.", time: 2000 },
   { title: "This site isn't done.", time: 8000 },
 ];
-
-const useInterval = (func: () => void, ms: number) => {
-  const intervalRef = useRef<NodeJS.Timeout>();
-  const funcRef = useUpdatingRef(func);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      funcRef.current();
-    }, ms);
-    return () => {
-      clearInterval(intervalRef.current);
-      intervalRef.current = undefined;
-    };
-  }, [funcRef, ms]);
-};
 
 const externalAnchorProps = {
   target: "_blank",
@@ -49,9 +36,10 @@ const HomePage = () => {
 
   return (
     <Center w="100%" h="100%">
+      {/* <CodeShoutout /> */}
       <Stack justify="center" align="center" className={styles.homeWrapper} maw={1000}>
         <Title size={100}>
-          <AnimatedText msPerChar={60}>{TITLE_TEXTS[titleTextIndex].title}</AnimatedText>
+          <AnimatedText msPerChar={100}>{TITLE_TEXTS[titleTextIndex].title}</AnimatedText>
         </Title>
         <Text size="xl" ta="center">
           Thrilled to have you here. You seem nice.

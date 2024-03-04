@@ -9,7 +9,9 @@
   z-index: 0
   // display: grid
   padding: 25px 0
-  display: flex
+  display: grid
+  gap: 0
+  grid-template-columns: repeat(4, 1fr)
   flex-wrap: wrap
   gap: 30px
   padding: 30px
@@ -21,11 +23,23 @@
     white-space: nowrap
     display: flex
     margin: 0 auto
+
+
+  @media (max-width: $mantine-breakpoint-md)
+    grid-template-columns: repeat(2, 1fr)
   
   @media (max-width: $mantine-breakpoint-xs)
     > div
+      width: 150px
+      white-space: unset
+      *
+        font-size: $mantine-font-size-sm
+  @media (max-width: 400px)
+    > div
       width: 100px
       white-space: unset
+    *
+      font-size: $mantine-font-size-xs !important
 
 .footer_anchor
   display: flex

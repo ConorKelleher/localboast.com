@@ -1,4 +1,4 @@
-import { cx } from "localboast";
+import cx from "localboast/utils/cx";
 import KnobInnerImage from "../assets/WheelInner.png";
 import KnobOuterImage from "../assets/WheelOuter.png";
 import styles from "./styles.module.sass";

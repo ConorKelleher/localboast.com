@@ -1,5 +1,5 @@
 import React from "react";
-import { cx } from "localboast";
+import cx from "localboast/utils/cx";
 
 import LocalBoastWhiteWideLogo from "assets/logo_white_wide.svg?react";
 

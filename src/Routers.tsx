@@ -1,4 +1,5 @@
 import ErrorPage from "Pages/ErrorPage/ErrorPage";
+import GivePage from "Pages/GivePage";
 import HomePage from "Pages/HomePage";
 import InProgressPage from "Pages/InProgressPage";
 import LivePage from "Pages/LivePage/LivePage";
@@ -49,6 +50,10 @@ export const RootRouter = [
       {
         path: Paths.TwitchAuthPage,
         element: <TwitchAuthPage />,
+      },
+      {
+        path: Paths.GivePage,
+        element: <GivePage />,
       },
     ],
   },

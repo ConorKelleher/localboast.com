@@ -1,11 +1,13 @@
-import { Switch, useMantineColorScheme, useMantineTheme, rem } from "@mantine/core";
+import { Switch, useMantineColorScheme, useMantineTheme, rem, useComputedColorScheme } from "@mantine/core";
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
+import { DEFAULT_COLOR_SCHEME } from "constants/preferences";
 import { useWipe } from "localboast";
 
 const DarkSideToggle = () => {
   const theme = useMantineTheme();
   const { wipe, positionRef } = useWipe();
   const { colorScheme, setColorScheme } = useMantineColorScheme({ keepTransitions: true });
+  const computedColorScheme = useComputedColorScheme(DEFAULT_COLOR_SCHEME);
 
   const sunIcon = <IconSun style={{ width: rem(16), height: rem(16) }} stroke={2.5} color={theme.colors.yellow[4]} />;
 
@@ -17,7 +19,7 @@ const DarkSideToggle = () => {
     <div ref={(ref) => (positionRef.current = ref)}>
       <Switch
         size="lg"
-        defaultChecked={colorScheme === "dark"}
+        defaultChecked={computedColorScheme === "dark"}
         onChange={() => {
           wipe();
           setColorScheme(colorScheme === "light" ? "dark" : "light");

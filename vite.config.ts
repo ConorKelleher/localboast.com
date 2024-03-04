@@ -29,6 +29,7 @@ export default defineConfig({
     alias: {
       src: "/src",
     },
+    // preserveSymlinks: true,
   },
   build: {
     rollupOptions: {

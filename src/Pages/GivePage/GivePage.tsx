@@ -6,7 +6,7 @@ const GivePage = () => {
   usePageTitle("How to Support | LocalBoast");
 
   useEffect(() => {
-    window.location.href = SE_TIP_URL;
+    window.location.replace(SE_TIP_URL);
   }, []);
 
   return null;

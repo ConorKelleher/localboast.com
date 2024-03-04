@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useTwitchChat, LS_KEY_TWITCH_CHANNEL } from "localboast";
+import useTwitchChat from "localboast/hooks/useTwitchChat";
+import { LS_KEY_TWITCH_CHANNEL } from "localboast/constants/twitchConstants";
 import styles from "./styles.module.sass";
 import { AuthStep, JoinStep, LoadStep, PlayStep } from "./components/Steps";
 import { LS_ET_CHAT_SKETCH_LINES, TWITCH_CHAT_BOT_CLIENT_ID } from "constants/twitchConstants";

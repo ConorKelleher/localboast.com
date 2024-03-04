@@ -27,13 +27,13 @@ While I'm not really intending for there to be collaboration on this project (as
 
 # Live Development
 
-In an attempt to be somewhat unique, the development of this project is largely happening live on stream over on [Twitch](https://twitch.tv/localboast1) or on [YouTube Live](http://youtube.com/channel/UCt-IaL4qQsOU6_rbS7zky1Q/live). A record of all past live streams and other video documentation can also be found at the above YouTube channel.
+In an attempt to be somewhat unique, the development of this project is largely happening live on stream over on [Twitch](https://twitch.tv/localboast) or on [YouTube Live](http://youtube.com/channel/UCt-IaL4qQsOU6_rbS7zky1Q/live). A record of all past live streams and other video documentation can also be found at the above YouTube channel.
 
 # Donations
 
 I'm working on this instead of having a job that pays me. So for the time being, I'm going to be funded through generosity alone. If you're feeling generous, here are some links:
 
-- Direct Tip (will show up on stream if I'm live): https://streamelements.com/localboast1/tip
+- Direct Tip (will show up on stream if I'm live): https://streamelements.com/localboast/tip
 - Patreon: https://patreon.com/LocalBoast
 
 # License

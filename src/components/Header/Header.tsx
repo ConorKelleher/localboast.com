@@ -1,7 +1,8 @@
 import { Group, darken, rgba, useMantineColorScheme } from "@mantine/core";
 import DarkSideToggle from "./components/DarkSideToggle";
 import HomeIcon from "./components/HomeIcon";
-import { useSize, useUpdatingRef } from "localboast";
+import useSize from "localboast/hooks/useSize";
+import useUpdatingRef from "localboast/hooks/useUpdatingRef";
 import { useEffect } from "react";
 import { LB_COLORS } from "theme";
 import * as LINKS from "constants/lbLinks";
@@ -59,7 +60,9 @@ const Header = (props: HeaderProps) => {
       justify="space-between"
       wrap="nowrap"
       id="page-header"
-      ref={(ref) => ref && setRef(ref)}
+      ref={(ref) => {
+        ref && setRef(ref);
+      }}
       className={styles.header}
     >
       <Group wrap="nowrap">
@@ -71,7 +74,7 @@ const Header = (props: HeaderProps) => {
       <Group gap={20}>
         <HeaderNavItem
           icon={IconHeartHandshake}
-          href={LINKS.SE_TIP}
+          to={Paths.GivePage}
           title={getCopy("seeGive")}
           childLinks={[
             {

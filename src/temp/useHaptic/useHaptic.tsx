@@ -1,4 +1,4 @@
-import { useUpdatingRef } from "localboast";
+import useUpdatingRef from "localboast/hooks/useUpdatingRef";
 import { useCallback, useMemo, useRef, useState } from "react";
 
 type InteractionEvent = React.MouseEvent | React.KeyboardEvent;

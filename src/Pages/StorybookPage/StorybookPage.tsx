@@ -3,7 +3,7 @@ import styles from "./styles.module.sass";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import usePageTitle from "temp/usePageTitle";
-import { capitalize } from "localboast";
+import { capitalize } from "localboast/utils/stringHelpers";
 
 const baseUrl = "assets/storybook-static/index.html";
 
@@ -55,16 +55,7 @@ const StorybookPage = () => {
     };
   }, []);
 
-  const onChangeIframe = (ref: HTMLIFrameElement | null) => {
-    if (!ref) {
-      return;
-    }
-    iframeRef.current = ref;
-    ref.onload = onIframeLoaded;
-  };
-
   const setQuery = (newQuery: string) => {
-    debugger;
     navigate(
       {
         ...location,
@@ -76,7 +67,6 @@ const StorybookPage = () => {
 
   const onIframeLoaded = () => {
     const iframeLoaded = iframeRef.current?.contentWindow?.document.getElementById("root");
-
     if (iframeLoaded) {
       queryPollIntervalRef.current = setInterval(() => {
         const iframeQuery = iframeRef.current!.contentWindow!.location.search;
@@ -87,6 +77,14 @@ const StorybookPage = () => {
     } else if (errorRef.current) {
       errorRef.current.style.display = "unset";
     }
+  };
+
+  const onChangeIframe = (ref: HTMLIFrameElement | null) => {
+    if (!ref) {
+      return;
+    }
+    iframeRef.current = ref;
+    ref.onload = onIframeLoaded;
   };
 
   return (

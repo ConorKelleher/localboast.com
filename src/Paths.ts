@@ -10,6 +10,7 @@ const Paths = {
   TwitchAuthPage: "twitch_auth",
   UnwrappedRoot: "apps",
   EtChatSketch: "sketch",
+  GivePage: "tip",
 };
 
 export default Paths;
