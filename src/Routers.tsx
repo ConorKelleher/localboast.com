@@ -12,6 +12,7 @@ import { UnwrappedRoot } from "Pages/Root/Root";
 import StorybookPage from "Pages/StorybookPage";
 import TwitchAuthPage from "Pages/TwitchAuthPage";
 import Paths from "Paths";
+import Replay from "components/Apps/Replay";
 
 export const RootRouter = [
   {
@@ -65,6 +66,10 @@ export const RootRouter = [
       {
         path: Paths.EtChatSketch,
         element: <EtChatSketch />,
+      },
+      {
+        path: Paths.Replay,
+        element: <Replay />,
       },
     ],
   },
