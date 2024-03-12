@@ -1,4 +1,4 @@
-import usePageTitle from "temp/usePageTitle";
+import usePageTitle from "localboast/hooks/usePageTitle";
 
 const LivePage = () => {
   usePageTitle("Watch me Live | LocalBoast");

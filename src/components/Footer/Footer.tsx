@@ -1,4 +1,4 @@
-import { Anchor, Box, Stack, Text, darken, lighten, useMantineColorScheme } from "@mantine/core";
+import { Anchor, Box, Stack, Text, lighten, useMantineColorScheme } from "@mantine/core";
 import PatreonLogo from "/src/assets/patreon_logo.svg?react";
 import TwitchLogo from "/src/assets/twitch_logo.svg?react";
 import KoFiLogo from "/src/assets/ko-fi_logo.svg?react";
@@ -22,7 +22,7 @@ const Footer = forwardRef<HTMLDivElement | null>((_props, ref) => {
   const { colorScheme } = useMantineColorScheme();
   const iconColor = colorScheme === "dark" ? LB_COLORS.darkFooterIcons : LB_COLORS.lightFooterIcons;
   const backgroundColor =
-    colorScheme === "dark" ? darken(LB_COLORS.boastfulPurple, 0.2) : lighten(LB_COLORS.boastfulYellow, 0.1);
+    colorScheme === "dark" ? lighten(LB_COLORS.dark, 0.1) : lighten(LB_COLORS.boastfulYellow, 0.2);
   return (
     <Box id="page-footer" className={styles.footer} ref={ref} style={{ backgroundColor }}>
       <Stack>

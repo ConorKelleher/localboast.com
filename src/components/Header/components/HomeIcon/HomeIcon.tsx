@@ -2,10 +2,10 @@ import { Group, UnstyledButton, useMantineColorScheme } from "@mantine/core";
 import LogoSVG from "/src/assets/logo_color.svg?react";
 import LogoWideSVG from "/src/assets/logo_color_wide.svg?react";
 import styles from "./styles.module.sass";
+import useHaptic from "localboast/hooks/useHaptic";
 import cx from "localboast/utils/cx";
 import { useNavigate } from "react-router-dom";
 import Paths from "Paths";
-import useHaptic from "temp/useHaptic";
 
 const HomeIcon = () => {
   const { colorScheme } = useMantineColorScheme();

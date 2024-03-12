@@ -1,18 +1,18 @@
-import { Group, darken, rgba, useMantineColorScheme } from "@mantine/core";
+import { Group, rgba, useMantineColorScheme } from "@mantine/core";
 import DarkSideToggle from "./components/DarkSideToggle";
 import HomeIcon from "./components/HomeIcon";
 import useSize from "localboast/hooks/useSize";
+import Haptic from "localboast/components/Haptic";
 import useUpdatingRef from "localboast/hooks/useUpdatingRef";
 import { useEffect } from "react";
 import { LB_COLORS } from "theme";
 import * as LINKS from "constants/lbLinks";
 import GithubLogoSVG from "assets/github_logo.svg?react";
-import { IconHammer, IconHeartHandshake, IconVideo, IconVocabulary } from "@tabler/icons-react";
+import { IconApps, IconHammer, IconHeartHandshake, IconVideo, IconVocabulary } from "@tabler/icons-react";
 import getCopy from "constants/localisation";
 
 import styles from "./styles.module.sass";
 import Paths from "Paths";
-import Haptic from "temp/Haptic";
 import HeaderNavItem from "./components/HeaderNavItem/HeaderNavItem";
 
 interface HeaderProps {
@@ -34,7 +34,8 @@ const Header = (props: HeaderProps) => {
   }, [size?.height]);
 
   const updateHeaderColorRef = useUpdatingRef(() => {
-    const baseColor = colorScheme === "dark" ? darken(LB_COLORS.boastfulPurple, 0.3) : LB_COLORS.boastfulYellow;
+    const baseColor = colorScheme === "dark" ? LB_COLORS.dark : LB_COLORS.light;
+    const shadowColor = colorScheme === "dark" ? LB_COLORS.light : LB_COLORS.dark;
     let alpha = 1;
 
     const headerHeight = size?.height;
@@ -48,6 +49,7 @@ const Header = (props: HeaderProps) => {
 
     document.documentElement.style.setProperty("--header-bg-color", rgba(baseColor, alpha));
     document.documentElement.style.setProperty("--header-shadow-opacity", alpha.toString());
+    document.documentElement.style.setProperty("--header-shadow-color", shadowColor);
   });
 
   // Update header color on colorScheme or scrollTop change
@@ -74,7 +76,7 @@ const Header = (props: HeaderProps) => {
       <Group gap={20}>
         <HeaderNavItem
           icon={IconHeartHandshake}
-          to={Paths.GivePage}
+          to={LINKS.TIP_DEFAULT}
           title={getCopy("seeGive")}
           childLinks={[
             {
@@ -95,6 +97,7 @@ const Header = (props: HeaderProps) => {
           ]}
         />
         <HeaderNavItem icon={IconVocabulary} to={Paths.StorybookPage} title={getCopy("seeDocs")} />
+        <HeaderNavItem icon={IconApps} to={Paths.AppsPage} title={getCopy("seeApps")} />
         <HeaderNavItem icon={IconHammer} to={Paths.InProgressPage} title={getCopy("seeWip")} />
         <HeaderNavItem
           icon={GithubLogoSVG}
@@ -126,10 +129,6 @@ const Header = (props: HeaderProps) => {
             {
               to: Paths.YouTubePage,
               label: getCopy("youtube"),
-            },
-            {
-              to: Paths.LiveUtilsPage,
-              label: getCopy("liveUtils"),
             },
           ]}
         />

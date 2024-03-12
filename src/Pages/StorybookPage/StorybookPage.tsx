@@ -2,7 +2,7 @@ import StorybookBuild from "StorybookBuild";
 import styles from "./styles.module.sass";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-import usePageTitle from "temp/usePageTitle";
+import usePageTitle from "localboast/hooks/usePageTitle";
 import { capitalize } from "localboast/utils/stringHelpers";
 
 const baseUrl = "assets/storybook-static/index.html";

@@ -6,7 +6,7 @@ import { useWipe } from "localboast";
 const DarkSideToggle = () => {
   const theme = useMantineTheme();
   const { wipe, positionRef } = useWipe();
-  const { colorScheme, setColorScheme } = useMantineColorScheme({ keepTransitions: true });
+  const { setColorScheme } = useMantineColorScheme({ keepTransitions: true });
   const computedColorScheme = useComputedColorScheme(DEFAULT_COLOR_SCHEME);
 
   const sunIcon = <IconSun style={{ width: rem(16), height: rem(16) }} stroke={2.5} color={theme.colors.yellow[4]} />;
@@ -20,9 +20,12 @@ const DarkSideToggle = () => {
       <Switch
         size="lg"
         defaultChecked={computedColorScheme === "dark"}
-        onChange={() => {
+        onChange={(e) => {
+          const { checked } = e.currentTarget;
+          // setTimeout(() => {
           wipe();
-          setColorScheme(colorScheme === "light" ? "dark" : "light");
+          setColorScheme(checked ? "dark" : "light");
+          // }, 0);
         }}
         onLabel={moonIcon}
         offLabel={sunIcon}

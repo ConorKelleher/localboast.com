@@ -4,8 +4,8 @@ import { ElementType, useState } from "react";
 import { LB_COLORS } from "theme";
 
 import styles from "./styles.module.sass";
-import useHaptic from "temp/useHaptic";
-import useDelayedValue from "temp/useDelayedValue";
+import useHaptic from "localboast/hooks/useHaptic";
+import useDelayedValue from "localboast/hooks/useDelayedValue";
 
 const ICON_SIZE = 40;
 
@@ -66,8 +66,8 @@ const localAnchorProps = {
   ...sharedAnchorProps,
   component: Link,
 };
-const MENU_OPEN_DELAY = 300;
-const MENU_ITEM_REVEAL_DELAY = MENU_OPEN_DELAY + 600;
+const MENU_OPEN_DELAY = 150;
+const MENU_ITEM_REVEAL_DELAY = MENU_OPEN_DELAY + 300;
 
 const HeaderNavItem = (props: HeaderNavItemProps) => {
   const mergedProps = {

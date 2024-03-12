@@ -1,6 +1,6 @@
 import { Anchor, Stack, Text } from "@mantine/core";
 import PageWrapper from "Pages/PageWrapper/PageWrapper";
-import usePageTitle from "temp/usePageTitle";
+import usePageTitle from "localboast/hooks/usePageTitle";
 
 const ErrorPage = () => {
   usePageTitle("404 | LocalBoast");

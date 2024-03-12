@@ -1,24 +1,45 @@
-import ErrorPage from "Pages/ErrorPage/ErrorPage";
-import GivePage from "Pages/GivePage";
+import AppsPage from "Pages/AppsPage";
+import ErrorPage from "Pages/ErrorPage";
+import ExternalLink from "Pages/ExternalLink";
+import { ExternalLinkMappings } from "Pages/ExternalLink/constants";
 import HomePage from "Pages/HomePage";
 import InProgressPage from "Pages/InProgressPage";
-import LivePage from "Pages/LivePage/LivePage";
-import EtChatSketch from "Pages/LivePage/Pages/LiveUtilsPage/EtChatSketch";
-import LiveUtilsPage from "Pages/LivePage/Pages/LiveUtilsPage/LiveUtilsPage";
+import LivePage from "Pages/LivePage";
 import TwitchPage from "Pages/LivePage/Pages/TwitchPage";
-import YouTubePage from "Pages/LivePage/Pages/YouTubePage/YouTubePage";
+import YouTubePage from "Pages/LivePage/Pages/YouTubePage";
 import Root from "Pages/Root";
-import { UnwrappedRoot } from "Pages/Root/Root";
+import { UnwrappedRoot } from "Pages/Root";
 import StorybookPage from "Pages/StorybookPage";
 import TwitchAuthPage from "Pages/TwitchAuthPage";
 import Paths from "Paths";
+import EtChatSketch from "components/Apps/EtChatSketch";
 import Replay from "components/Apps/Replay";
+import { ReactNode } from "react";
 
-export const RootRouter = [
+type Route = {
+  path: string;
+  element: ReactNode;
+  errorElement?: ReactNode;
+  children?: Route[];
+};
+const wrapRoutesInErrors = (routes: Route[]): Route[] =>
+  routes.map(
+    (route) =>
+      ({
+        ...route,
+        errorElement: <ErrorPage />,
+        children: route.children ? wrapRoutesInErrors(route.children) : route.children,
+      } as Route)
+  );
+
+export const RootRouter = wrapRoutesInErrors([
+  ...Object.keys(ExternalLinkMappings).map((externalLinkPath) => ({
+    path: externalLinkPath,
+    element: <ExternalLink />,
+  })),
   {
     path: Paths.Root,
     element: <Root />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: Paths.HomePage,
@@ -41,10 +62,6 @@ export const RootRouter = [
         element: <YouTubePage />,
       },
       {
-        path: Paths.LiveUtilsPage,
-        element: <LiveUtilsPage />,
-      },
-      {
         path: Paths.TwitchPage,
         element: <TwitchPage />,
       },
@@ -53,15 +70,14 @@ export const RootRouter = [
         element: <TwitchAuthPage />,
       },
       {
-        path: Paths.GivePage,
-        element: <GivePage />,
+        path: Paths.AppsPage,
+        element: <AppsPage />,
       },
     ],
   },
   {
     path: Paths.UnwrappedRoot,
     element: <UnwrappedRoot />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: Paths.EtChatSketch,
@@ -73,4 +89,4 @@ export const RootRouter = [
       },
     ],
   },
-];
+]);

@@ -6,5 +6,6 @@ export const MAILTO = "mailto:localboast@outlook.com";
 export const DISCORD = "https://discord.gg/vB2b3wF66C";
 export const LIB_REPO = "https://github.com/ConorKelleher/localboast";
 export const SITE_REPO = "https://github.com/ConorKelleher/localboast.com";
-export const YOUTUBE = "https://www.youtube.com/channel/UCt-IaL4qQsOU6_rbS7zky1Q/live";
+// export const YOUTUBE = "https://www.youtube.com/channel/UCt-IaL4qQsOU6_rbS7zky1Q/live";
+export const YOUTUBE = "https://youtube.com/@localboast/live";
 export const TWITCH = "https://twitch.tv/localboast";

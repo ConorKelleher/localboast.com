@@ -5,13 +5,12 @@ const Paths = {
   LivePage: "live",
   InProgressPage: "wip",
   YouTubePage: "live/YouTube",
-  LiveUtilsPage: "live/utils",
   TwitchPage: "live/twitch",
   TwitchAuthPage: "twitch_auth",
   UnwrappedRoot: "apps",
   EtChatSketch: "sketch",
   Replay: "replay",
-  GivePage: "tip",
+  AppsPage: "apps",
 };
 
 export default Paths;

@@ -1,10 +1,10 @@
 import { Stack } from "@mantine/core";
 import Paths from "Paths";
+import usePageTitle from "localboast/hooks/usePageTitle";
 import { Link } from "react-router-dom";
-import usePageTitle from "temp/usePageTitle";
 
-const LiveUtilsPage = () => {
-  usePageTitle("Livestream Apps | LocalBoast");
+const AppsPage = () => {
+  usePageTitle("Apps | LocalBoast");
 
   return (
     <Stack>
@@ -14,4 +14,4 @@ const LiveUtilsPage = () => {
   );
 };
 
-export default LiveUtilsPage;
+export default AppsPage;

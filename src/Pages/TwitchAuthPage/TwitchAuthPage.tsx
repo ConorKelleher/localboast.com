@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "qs";
 import { LS_KEY_TWITCH_AUTH_TOKEN, LS_KEY_TWITCH_CSRF_TOKEN } from "localboast/constants/twitchConstants";
-import usePageTitle from "temp/usePageTitle";
+import usePageTitle from "localboast/hooks/usePageTitle";
 
 const TwitchAuthPage = () => {
   const location = useLocation();

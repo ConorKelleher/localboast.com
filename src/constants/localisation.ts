@@ -11,13 +11,13 @@ export const DEFAULT_LOCALE = {
   seeLive: "Watch me live",
   youtube: "YouTube",
   twitch: "Twitch",
-  liveUtils: "Apps",
   seeGive: "Ways to support",
   seeGithub: "GitHub Codebases",
   seeLibCode: "LocalBoast Library Source Code",
   seeSiteCode: "This Website's Source Code",
   seeDocs: "Explore the LocalBoast Library",
   seeWip: "See what I'm working on",
+  seeApps: "Apps using the Library",
 };
 
 type Key = keyof typeof DEFAULT_LOCALE;

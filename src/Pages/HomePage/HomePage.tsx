@@ -6,7 +6,7 @@ import { useState } from "react";
 import AnimatedText from "localboast/components/AnimatedText";
 import useInterval from "localboast/hooks/useInterval";
 import Paths from "Paths";
-import usePageTitle from "temp/usePageTitle";
+import usePageTitle from "localboast/hooks/usePageTitle";
 // import CodeShoutout from "./components/CodeShoutout";
 
 const TITLE_TEXTS = [
