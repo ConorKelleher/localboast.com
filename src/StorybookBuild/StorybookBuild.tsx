@@ -2,8 +2,8 @@ import classes from "./StorybookBuild.module.sass";
 
 interface StorybookBuildProps {
   url: string;
-  onChangeIframeRef: (ref: HTMLIFrameElement | null) => void;
-  onChangeErrorRef: (ref: HTMLElement | null) => void;
+  onChangeIframeRef?: (ref: HTMLIFrameElement | null) => void;
+  onChangeErrorRef?: (ref: HTMLElement | null) => void;
 }
 /*
 unused attempt at making full storybook content sit flat on page

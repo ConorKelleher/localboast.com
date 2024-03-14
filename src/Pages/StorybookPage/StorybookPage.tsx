@@ -13,6 +13,7 @@ allLocalBoastKeys.forEach((key) => {
 });
 
 const baseUrl = "assets/storybook-static/index.html";
+const defaultQuery = "?path=/docs/welcome--docs";
 
 const getCodebaseTitleFromQuery = (query: string) => {
   let title = "Library";
@@ -37,15 +38,27 @@ const getCodebaseTitleFromQuery = (query: string) => {
   return `${title} | LocalBoast`;
 };
 
+const translateFromUglyQuery = (uglyQuery: string) => {
+  return uglyQuery.replace("path=/docs/", "page=").replace("--docs", "");
+};
+
+const translateToUglyQuery = (niceQuery: string) => {
+  if (niceQuery.includes("path=/docs/")) {
+    // direct navigation to ugly url, just use that
+    return niceQuery;
+  }
+  return niceQuery.replace("page=", "path=/docs/") + "--docs";
+};
+
 const StorybookPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const pageTitle = useMemo(() => getCodebaseTitleFromQuery(location.search), [location.search]);
   usePageTitle(pageTitle);
-  const query = location.search;
+  const query = translateToUglyQuery(location.search);
   const queryRef = useRef(query);
   const queryPollIntervalRef = useRef<NodeJS.Timeout>();
-  const [currentUrl] = useState(baseUrl + query);
+  const [initialUrl] = useState(baseUrl + (query || defaultQuery));
   const iframeRef = useRef<HTMLIFrameElement | null>();
   const errorRef = useRef<HTMLElement | null>();
 
@@ -67,7 +80,7 @@ const StorybookPage = () => {
     navigate(
       {
         ...location,
-        search: newQuery,
+        search: translateFromUglyQuery(newQuery),
       },
       { replace: !query } // Don't add to history if automatically redirecting from root
     );
@@ -98,7 +111,7 @@ const StorybookPage = () => {
   return (
     <div className={styles.storybookPage}>
       <StorybookBuild
-        url={currentUrl}
+        url={initialUrl}
         onChangeIframeRef={onChangeIframe}
         onChangeErrorRef={(ref) => (errorRef.current = ref)}
       />
