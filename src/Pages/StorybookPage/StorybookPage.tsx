@@ -4,24 +4,32 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import usePageTitle from "localboast/hooks/usePageTitle";
 import { capitalize } from "localboast/utils/stringHelpers";
+import * as LocalBoast from "localboast";
+
+const allLocalBoastKeys = Object.keys(LocalBoast);
+const allLocalBoastKeysLowerCaseMap: Record<string, string> = {};
+allLocalBoastKeys.forEach((key) => {
+  allLocalBoastKeysLowerCaseMap[key.toLowerCase()] = key;
+});
 
 const baseUrl = "assets/storybook-static/index.html";
 
 const getCodebaseTitleFromQuery = (query: string) => {
-  let title = "React Library";
+  let title = "Library";
 
   if (query) {
     const storyContext = query.replace(/\?path=\/[a-z]+\//, "");
     title = "";
     if (storyContext) {
-      const [module, storyName] = storyContext.split("--");
+      const [module] = storyContext.split("--");
       const moduleTitleSegments = module.split("-");
 
       if (moduleTitleSegments[1]) {
-        title += `${moduleTitleSegments[1]}`;
-      }
-      if (storyName && storyName !== "docs") {
-        title += ` - ${storyName.split("-").map(capitalize).join(" ")}`;
+        const lowerCaseModuleName = moduleTitleSegments[1];
+        const moduleName = allLocalBoastKeysLowerCaseMap[lowerCaseModuleName] || lowerCaseModuleName;
+        title += moduleName;
+      } else {
+        title += capitalize(moduleTitleSegments[0]);
       }
     }
   }
