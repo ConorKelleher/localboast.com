@@ -121,7 +121,7 @@ const Footer = forwardRef<HTMLDivElement, FooterProps>((props, ref) => {
           </Box>
         )}
       </Transition>
-      <Affix position={{ bottom: 20, right: 20 }}>
+      <Affix visibleFrom="sm" position={{ bottom: 20, right: 20 }}>
         <Transition transition="slide-up" mounted={atBottomOfContent}>
           {(transitionStyles) => (
             <Button
