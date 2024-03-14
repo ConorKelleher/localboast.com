@@ -27,7 +27,7 @@ const wrapRoutesInErrors = (routes: Route[]): Route[] =>
     (route) =>
       ({
         ...route,
-        errorElement: <ErrorPage />,
+        errorElement: route.errorElement || <ErrorPage />,
         children: route.children ? wrapRoutesInErrors(route.children) : route.children,
       } as Route)
   );
@@ -48,6 +48,12 @@ export const RootRouter = wrapRoutesInErrors([
       {
         path: Paths.StorybookPage,
         element: <StorybookPage />,
+        children: [
+          {
+            path: "*",
+            element: <StorybookPage />,
+          },
+        ],
       },
       {
         path: Paths.LivePage,

@@ -1,6 +1,6 @@
 import StorybookBuild from "StorybookBuild";
 import styles from "./styles.module.sass";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Location, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import usePageTitle from "localboast/hooks/usePageTitle";
 import { capitalize } from "localboast/utils/stringHelpers";
@@ -12,7 +12,7 @@ allLocalBoastKeys.forEach((key) => {
   allLocalBoastKeysLowerCaseMap[key.toLowerCase()] = key;
 });
 
-const baseUrl = "assets/storybook-static/index.html";
+const baseUrl = "/assets/storybook-static/index.html";
 const defaultQuery = "?path=/docs/welcome--docs";
 
 const getCodebaseTitleFromQuery = (query: string) => {
@@ -38,16 +38,25 @@ const getCodebaseTitleFromQuery = (query: string) => {
   return `${title} | LocalBoast`;
 };
 
-const translateFromUglyQuery = (uglyQuery: string) => {
-  return uglyQuery.replace("path=/docs/", "page=").replace("--docs", "");
+const translateFromUglyQuery = (location: Location, uglyQuery: string) => {
+  debugger;
+  const newLocation = {
+    ...location,
+    pathname: `${location.pathname.replace(/\/docs\/.+/, "/docs/")}${uglyQuery
+      .replace("?path=/docs/", "")
+      .replace("--docs", "")
+      .replace(/-/g, "/")}`,
+    query: "",
+  };
+  return newLocation;
 };
 
-const translateToUglyQuery = (niceQuery: string) => {
-  if (niceQuery.includes("path=/docs/")) {
+const translateToUglyQuery = (location: Location) => {
+  if (location.search.includes("path=/docs/")) {
     // direct navigation to ugly url, just use that
-    return niceQuery;
+    return location.search;
   }
-  return niceQuery.replace("page=", "path=/docs/") + "--docs";
+  return `?path=/docs/${(location.pathname.split("/docs/")[1] || "welcome").replace(/\//g, "-")}--docs`;
 };
 
 const StorybookPage = () => {
@@ -55,7 +64,7 @@ const StorybookPage = () => {
   const location = useLocation();
   const pageTitle = useMemo(() => getCodebaseTitleFromQuery(location.search), [location.search]);
   usePageTitle(pageTitle);
-  const query = translateToUglyQuery(location.search);
+  const query = translateToUglyQuery(location);
   const queryRef = useRef(query);
   const queryPollIntervalRef = useRef<NodeJS.Timeout>();
   const [initialUrl] = useState(baseUrl + (query || defaultQuery));
@@ -78,10 +87,7 @@ const StorybookPage = () => {
 
   const setQuery = (newQuery: string) => {
     navigate(
-      {
-        ...location,
-        search: translateFromUglyQuery(newQuery),
-      },
+      translateFromUglyQuery(location, newQuery),
       { replace: !query } // Don't add to history if automatically redirecting from root
     );
   };
