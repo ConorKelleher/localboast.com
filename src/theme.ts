@@ -1,4 +1,4 @@
-import { Anchor, MantineColorsTuple, Menu, createTheme, darken } from "@mantine/core";
+import { Anchor, MantineColorsTuple, Menu, createTheme, darken, lighten } from "@mantine/core";
 
 export const LB_COLORS: { [color: string]: string } = {
   boastfulYellow: "#ffca43",
@@ -8,6 +8,31 @@ export const LB_COLORS: { [color: string]: string } = {
   boastfulPurple: "#3b1e51",
   dark: "#0A363D",
   light: "#ffca43",
+};
+
+Object.entries(LB_COLORS).map(([key, value]) => {
+  document.documentElement.style.setProperty(`--lb-colors-${key}`, value);
+});
+type Theme = Record<"light" | "dark", string>;
+export enum ComponentTheme {
+  primary = "primary",
+  secondary = "secondary",
+  tertiary = "tertiary",
+}
+type ThemeKey = keyof typeof ComponentTheme;
+export const LB_THEMES: Record<ThemeKey, Theme> = {
+  primary: {
+    light: LB_COLORS.boastfulBlue,
+    dark: LB_COLORS.boastfulYellow,
+  },
+  secondary: {
+    light: LB_COLORS.boastfulRed,
+    dark: LB_COLORS.boastfulGreen,
+  },
+  tertiary: {
+    light: LB_COLORS.boastfulPurple,
+    dark: lighten(LB_COLORS.light, 0.8),
+  },
 };
 LB_COLORS.lightHeaderIcons = LB_COLORS.boastfulPurple;
 LB_COLORS.darkHeaderIcons = LB_COLORS.boastfulYellow;

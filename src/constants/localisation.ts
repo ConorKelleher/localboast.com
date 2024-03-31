@@ -18,6 +18,9 @@ export const DEFAULT_LOCALE = {
   seeDocs: "Explore the LocalBoast Library",
   seeWip: "See what I'm working on",
   seeApps: "Apps using the Library",
+  policies: "Policies",
+  cookiePolicy: "Cookie Policy",
+  privacyPolicy: "Privacy Policy",
 };
 
 type Key = keyof typeof DEFAULT_LOCALE;

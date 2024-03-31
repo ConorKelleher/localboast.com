@@ -1,3 +1,4 @@
+import React, { MutableRefObject, forwardRef } from "react";
 import {
   Affix,
   Anchor,
@@ -8,19 +9,19 @@ import {
   Transition,
   lighten,
   rem,
-  useMantineColorScheme,
+  useComputedColorScheme,
 } from "@mantine/core";
+import AnimatedText from "localboast/components/AnimatedText";
+import useShowHideFooter from "localboast/hooks/useShowHideFooter";
+
 import PatreonLogo from "/src/assets/patreon_logo.svg?react";
 import TwitchLogo from "/src/assets/twitch_logo.svg?react";
 import KoFiLogo from "/src/assets/ko-fi_logo.svg?react";
 import styles from "./styles.module.sass";
-import React, { MutableRefObject, forwardRef, useMemo, useRef } from "react";
 import * as LINKS from "constants/lbLinks";
 import getCopy from "constants/localisation";
 import { LB_COLORS } from "theme";
 import { IconArrowUp } from "@tabler/icons-react";
-import useDelayedValue from "localboast/hooks/useDelayedValue";
-import AnimatedText from "localboast/components/AnimatedText";
 
 interface FooterAnchorProps extends React.PropsWithChildren {
   href?: string;
@@ -39,43 +40,32 @@ interface FooterProps {
   viewportRef: MutableRefObject<HTMLDivElement | null>;
 }
 
-const FOOTER_SCROLL_PADDING = 10;
-
 const Footer = forwardRef<HTMLDivElement, FooterProps>((props, ref) => {
   const { scrollTop, scrollTo, scrollBy, viewportRef } = props;
-  const footerRef = useRef<HTMLDivElement | null>(null);
-  const { colorScheme } = useMantineColorScheme();
+  const colorScheme = useComputedColorScheme();
   const iconColor = colorScheme === "dark" ? LB_COLORS.darkFooterIcons : LB_COLORS.lightFooterIcons;
   const backgroundColor =
     colorScheme === "dark" ? lighten(LB_COLORS.dark, 0.1) : lighten(LB_COLORS.boastfulYellow, 0.2);
-  const footerTopPixels = useMemo(() => {
-    let topPixels = 0;
-    if (footerRef.current) {
-      const rect = footerRef.current.getBoundingClientRect();
-      topPixels = rect.top;
-    }
-    return topPixels;
-  }, [scrollTop]); // eslint-disable-line react-hooks/exhaustive-deps
-  const visibleFooterPixels = useMemo(() => {
-    let visiblePixels = 0;
-    if (footerTopPixels) {
-      visiblePixels = window.innerHeight - footerTopPixels;
-    }
-    return visiblePixels;
-  }, [footerTopPixels]);
-  const atBottomOfContent = visibleFooterPixels + FOOTER_SCROLL_PADDING > 0;
-  const [delayedAtBottomOfContent] = useDelayedValue(atBottomOfContent, { delay: 100 });
-  const footerVisible = visibleFooterPixels > 0;
-  const [delayedFooterVisible] = useDelayedValue(footerVisible, { delay: 100 });
+
+  const { delayedFooterWithinRange, footerVisible, delayedFooterVisible, setFooterEl, visibleFooterPixels } =
+    useShowHideFooter(scrollTop);
+
   return (
-    <div ref={footerRef}>
-      <Transition transition="slide-up" mounted={delayedAtBottomOfContent}>
+    <div
+      tabIndex={0}
+      ref={(ref) => {
+        if (ref) {
+          setFooterEl(ref);
+        }
+      }}
+    >
+      <Transition transition="slide-up" mounted={delayedFooterWithinRange}>
         {(transitionStyles) => (
           <Box
             id="page-footer"
             className={styles.footer}
             ref={ref}
-            style={{ backgroundColor, display: atBottomOfContent ? undefined : "none", ...transitionStyles }}
+            style={{ backgroundColor, display: delayedFooterWithinRange ? undefined : "none", ...transitionStyles }}
           >
             <Stack>
               <Text size="md" fw="700">
@@ -86,11 +76,10 @@ const Footer = forwardRef<HTMLDivElement, FooterProps>((props, ref) => {
             </Stack>
             <Stack>
               <Text size="md" fw="700">
-                {getCopy("tsAndCs")}
+                {getCopy("policies")}
               </Text>
-              <FooterAnchor>To-Do</FooterAnchor>
-              <FooterAnchor>I swear</FooterAnchor>
-              <FooterAnchor>Don't @ me</FooterAnchor>
+              <FooterAnchor href={LINKS.COOKIE_POLICY}>{getCopy("cookiePolicy")}</FooterAnchor>
+              <FooterAnchor href={LINKS.PRIVACY_POLICY}>{getCopy("privacyPolicy")}</FooterAnchor>
             </Stack>
             <Stack>
               <Text size="md" fw="700">
@@ -122,16 +111,16 @@ const Footer = forwardRef<HTMLDivElement, FooterProps>((props, ref) => {
         )}
       </Transition>
       <Affix visibleFrom="sm" position={{ bottom: 20, right: 20 }}>
-        <Transition transition="slide-up" mounted={atBottomOfContent}>
+        <Transition transition="slide-up" mounted={delayedFooterWithinRange}>
           {(transitionStyles) => (
             <Button
+              variant="light"
               leftSection={
                 <IconArrowUp
                   style={{
                     width: rem(16),
                     height: rem(16),
                     transition: "transform 0.2s ease",
-                    // transitionDelay: "0.5s",
                     transform: `rotate(${footerVisible ? 0 : 180}deg)`,
                   }}
                 />

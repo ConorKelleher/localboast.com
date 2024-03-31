@@ -55,11 +55,11 @@ const HomePage = () => {
           <Anchor {...externalAnchorProps} href={LINKS.LIB_REPO}>
             LocalBoast React Library
           </Anchor>
-          , as well as some of the utilities I've built using it{" "}
-          <Anchor component={Link} to={Paths.EtChatSketch}>
-            (see sneak-peek)
-          </Anchor>
-          .
+          , as well as some of the{" "}
+          <Anchor component={Link} to={Paths.AppsPage}>
+            apps I've built
+          </Anchor>{" "}
+          using it.
           <br />
           <br />
           I'm constantly working to extend this library and this site and I'm documenting the process through

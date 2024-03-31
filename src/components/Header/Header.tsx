@@ -1,11 +1,11 @@
-import { Group, rgba, useMantineColorScheme } from "@mantine/core";
+import { Group, useComputedColorScheme } from "@mantine/core";
 import DarkSideToggle from "./components/DarkSideToggle";
 import HomeIcon from "./components/HomeIcon";
 import useSize from "localboast/hooks/useSize";
 import Haptic from "localboast/components/Haptic";
 import useUpdatingRef from "localboast/hooks/useUpdatingRef";
+import cx from "localboast/utils/cx";
 import { useEffect } from "react";
-import { LB_COLORS } from "theme";
 import * as LINKS from "constants/lbLinks";
 import GithubLogoSVG from "assets/github_logo.svg?react";
 import { IconApps, IconHammer, IconHeartHandshake, IconVideo, IconVocabulary } from "@tabler/icons-react";
@@ -24,7 +24,7 @@ const SCROLL_MIN_OPACITY = 0.3;
 
 const Header = (props: HeaderProps) => {
   const { size, setRef } = useSize();
-  const { colorScheme } = useMantineColorScheme();
+  const colorScheme = useComputedColorScheme();
 
   // Need to know header height so body can adjust to fit it
   useEffect(() => {
@@ -34,8 +34,6 @@ const Header = (props: HeaderProps) => {
   }, [size?.height]);
 
   const updateHeaderColorRef = useUpdatingRef(() => {
-    const baseColor = colorScheme === "dark" ? LB_COLORS.dark : LB_COLORS.light;
-    const shadowColor = colorScheme === "dark" ? LB_COLORS.light : LB_COLORS.dark;
     let alpha = 1;
 
     const headerHeight = size?.height;
@@ -47,9 +45,7 @@ const Header = (props: HeaderProps) => {
       alpha = Math.max(SCROLL_MIN_OPACITY, (headerHeight - offset * SCROLL_FADE_RATE) / headerHeight);
     }
 
-    document.documentElement.style.setProperty("--header-bg-color", rgba(baseColor, alpha));
-    document.documentElement.style.setProperty("--header-shadow-opacity", alpha.toString());
-    document.documentElement.style.setProperty("--header-shadow-color", shadowColor);
+    document.documentElement.style.setProperty("--header-opacity", `${alpha * 100}%`);
   });
 
   // Update header color on colorScheme or scrollTop change
@@ -65,11 +61,11 @@ const Header = (props: HeaderProps) => {
       ref={(ref) => {
         ref && setRef(ref);
       }}
-      className={styles.header}
+      className={cx(styles.header, styles[`header_${colorScheme}`])}
     >
       <Group wrap="nowrap">
         <HomeIcon />
-        <Haptic focusScale={1.05} events={{ focus: true }}>
+        <Haptic focusScale={0.7} events={{ focus: true }}>
           <DarkSideToggle />
         </Haptic>
       </Group>

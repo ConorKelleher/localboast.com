@@ -1,4 +1,5 @@
 import AppsPage from "Pages/AppsPage";
+import AppsPageIndex from "Pages/AppsPage/AppsPageIndex";
 import ErrorPage from "Pages/ErrorPage";
 import ExternalLink from "Pages/ExternalLink";
 import { ExternalLinkMappings } from "Pages/ExternalLink/constants";
@@ -78,6 +79,20 @@ export const RootRouter = wrapRoutesInErrors([
       {
         path: Paths.AppsPage,
         element: <AppsPage />,
+        children: [
+          {
+            path: "",
+            element: <AppsPageIndex />,
+          },
+          {
+            path: Paths.EtChatSketch,
+            element: <EtChatSketch />,
+          },
+          {
+            path: Paths.Replay,
+            element: <Replay />,
+          },
+        ],
       },
     ],
   },

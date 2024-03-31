@@ -1,0 +1,66 @@
+.layout
+  display: flex
+  padding: 10px 10px 20px
+  border-width: 2px
+  border-style: solid
+  border-radius: 10px
+  gap: 10px
+  position: relative
+  height: fit-content
+  justify-content: center
+  align-items: center
+
+  p
+    margin: 0
+    text-align: justify
+
+  &_dark
+    background-color: #18292C
+
+    .title
+      fill: #18292C
+
+  &_light
+    background-color: #EFEBE0
+
+    .title
+      fill: #EFEBE0
+
+.vertical
+  flex-direction: column
+
+  .image
+    margin-top: 15px
+  
+  .title
+    position: absolute
+    top: 5px
+
+.horizontal
+  flex-direction: row
+
+  .image
+    max-width: min(40vw, 50%)
+
+.hybrid
+  flex-direction: column
+
+  .title
+    text-anchor: start
+
+.title
+  font-size: 32px
+  font-weight: 900
+  letter-spacing: 5px
+  text-transform: uppercase
+  dominant-baseline: middle
+  text-anchor: middle
+
+.image
+  border-radius: 10px
+  border-width: 2px
+  border-style: solid
+  max-width: min(70vw, calc(100% - 60px))
+  max-height: 400px
+  width: unset !important
+  height: fit-content

@@ -4,6 +4,7 @@ import { Location, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import usePageTitle from "localboast/hooks/usePageTitle";
 import { capitalize } from "localboast/utils/stringHelpers";
+import useUpdatingRef from "localboast/hooks/useUpdatingRef";
 import * as LocalBoast from "localboast";
 
 const allLocalBoastKeys = Object.keys(LocalBoast);
@@ -13,45 +14,75 @@ allLocalBoastKeys.forEach((key) => {
 });
 
 const baseUrl = "/assets/storybook-static/index.html";
-const defaultQuery = "?path=/docs/welcome--docs";
+const defaultSearch = "?path=/docs/welcome--docs";
 
-const getCodebaseTitleFromQuery = (query: string) => {
-  let title = "Library";
+const getCodebaseTitleFromSearch = (search: string) => {
+  let title = "";
 
-  if (query) {
-    const storyContext = query.replace(/\?path=\/[a-z]+\//, "");
-    title = "";
+  if (search) {
+    const storyContext = search.replace(/\?path=\/[a-z]+\//, "");
     if (storyContext) {
-      const [module] = storyContext.split("--");
-      const moduleTitleSegments = module.split("-");
+      const [lowercaseModuleName] = storyContext.split("--");
+      const moduleTitleSegments = lowercaseModuleName.split("-");
 
       if (moduleTitleSegments[1]) {
         const lowerCaseModuleName = moduleTitleSegments[1];
         const moduleName = allLocalBoastKeysLowerCaseMap[lowerCaseModuleName] || lowerCaseModuleName;
-        title += moduleName;
+        title = moduleName;
       } else {
-        title += capitalize(moduleTitleSegments[0]);
+        title = capitalize(moduleTitleSegments[0]);
       }
     }
+  }
+
+  return title;
+};
+
+const getCodebaseTitleFromPathname = (pathname: string) => {
+  let title = "";
+  const storyContext = pathname.replace(/\/docs\/?/, "");
+  if (storyContext) {
+    const [lowerCaseFolderName, lowerCaseModuleName] = storyContext.split("/");
+
+    if (lowerCaseModuleName) {
+      const moduleName = allLocalBoastKeysLowerCaseMap[lowerCaseModuleName] || lowerCaseModuleName;
+      title = moduleName;
+    } else {
+      title = capitalize(lowerCaseFolderName);
+    }
+  }
+  return title;
+};
+
+const getCodebaseTitleFromLocation = (location: Omit<Location, "state" | "key" | "hash">) => {
+  let title = "Library";
+
+  if (location.search.includes("path=/docs/")) {
+    title = getCodebaseTitleFromSearch(location.search) || title;
+  } else {
+    title = getCodebaseTitleFromPathname(location.pathname) || title;
   }
 
   return `${title} | LocalBoast`;
 };
 
-const translateFromUglyQuery = (location: Location, uglyQuery: string) => {
-  debugger;
+const translateFromUglySearch = (location: Location, uglySearch: string) => {
   const newLocation = {
     ...location,
-    pathname: `${location.pathname.replace(/\/docs\/.+/, "/docs/")}${uglyQuery
+    pathname: `${location.pathname.replace(/\/docs\/.+/, "/docs/")}/${uglySearch
       .replace("?path=/docs/", "")
       .replace("--docs", "")
-      .replace(/-/g, "/")}`,
-    query: "",
+      .replace("welcome", "")
+      .replace(/-/g, "/")}`
+      .replace(/\/+$/, "")
+      .replace(/\/+/g, "/"),
+    search: "",
   };
+
   return newLocation;
 };
 
-const translateToUglyQuery = (location: Location) => {
+const translateToUglySearch = (location: Location) => {
   if (location.search.includes("path=/docs/")) {
     // direct navigation to ugly url, just use that
     return location.search;
@@ -62,43 +93,66 @@ const translateToUglyQuery = (location: Location) => {
 const StorybookPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const pageTitle = useMemo(() => getCodebaseTitleFromQuery(location.search), [location.search]);
+  const pageTitle = useMemo(
+    () => getCodebaseTitleFromLocation({ pathname: location.pathname, search: location.search }),
+    [location.search, location.pathname]
+  );
   usePageTitle(pageTitle);
-  const query = translateToUglyQuery(location);
-  const queryRef = useRef(query);
-  const queryPollIntervalRef = useRef<NodeJS.Timeout>();
-  const [initialUrl] = useState(baseUrl + (query || defaultQuery));
+  const search = translateToUglySearch(location);
+  const searchRef = useRef(search);
+  const { hash } = location;
+  const hashRef = useRef(hash);
+  const searchPollIntervalRef = useRef<NodeJS.Timeout>();
+  const [initialUrl] = useState(baseUrl + (search || defaultSearch) + location.hash);
   const iframeRef = useRef<HTMLIFrameElement | null>();
   const errorRef = useRef<HTMLElement | null>();
+
+  const setLocationRef = useUpdatingRef(({ search: newSearch, hash: newHash }: { search: string; hash: string }) => {
+    searchRef.current = newSearch;
+    hashRef.current = newHash;
+    const newLocation = translateFromUglySearch(
+      {
+        ...location,
+        hash: newHash,
+      },
+      newSearch
+    );
+    if (
+      newLocation.pathname !== location.pathname ||
+      newLocation.search !== location.search ||
+      newLocation.hash !== location.hash
+    ) {
+      navigate(
+        newLocation,
+        { replace: !newSearch || newSearch.includes("path=/docs/") } // Don't add to history if automatically redirecting from root
+      );
+    }
+  });
 
   // When outer page query changes, update the url state so it goes there
   useEffect(() => {
     // leaving this commented out for now. Will need to figure something out
     // when I add external nav within docs. But currently all nav is done within the iframe
     // setUrl(baseUrl + query);
-    queryRef.current = query;
-  }, [query]);
+    setLocationRef.current({ search, hash });
+  }, [search, hash, setLocationRef]);
 
   useEffect(() => {
     return () => {
-      clearInterval(queryPollIntervalRef.current);
+      clearInterval(searchPollIntervalRef.current);
     };
   }, []);
-
-  const setQuery = (newQuery: string) => {
-    navigate(
-      translateFromUglyQuery(location, newQuery),
-      { replace: !query } // Don't add to history if automatically redirecting from root
-    );
-  };
 
   const onIframeLoaded = () => {
     const iframeLoaded = iframeRef.current?.contentWindow?.document.getElementById("root");
     if (iframeLoaded) {
-      queryPollIntervalRef.current = setInterval(() => {
-        const iframeQuery = iframeRef.current!.contentWindow!.location.search;
-        if (iframeQuery !== queryRef.current) {
-          setQuery(iframeQuery);
+      searchPollIntervalRef.current = setInterval(() => {
+        const newLocation = iframeRef.current!.contentWindow!.location;
+        const iframeSearch = newLocation.search;
+        const iframeHash = newLocation.hash;
+
+        if (iframeSearch !== searchRef.current || iframeHash || hashRef.current) {
+          setLocationRef.current(newLocation);
         }
       }, 500);
     } else if (errorRef.current) {

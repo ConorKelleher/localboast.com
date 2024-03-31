@@ -3,15 +3,33 @@
   padding: 20px
   position: sticky
   top: 0
-  background-color: var(--header-bg-color, var(--mantine-color-body))
+  // background-color: var(--header-bg-color, var(--mantine-color-body))
   pointer-events: none
   > *
     pointer-events: all
+
   &::before
-    content: " "
-    pointer-events: none
-    opacity: var(--header-shadow-opacity, 1)
-    position: absolute
-    inset: 0
-    left: -50px
-    box-shadow: 25px -15px 35px 0px var(--header-shadow-color, grey)
+
+  &_dark
+    background-color: color-mix(in srgb, transparent, var(--lb-colors-dark) var(--header-opacity))
+
+    &::before
+      content: " "
+      pointer-events: none
+      opacity: var(--header-opacity, 1)
+      position: absolute
+      inset: 0
+      left: -50px
+      box-shadow: 25px -15px 35px 0px var(--lb-colors-light, grey)
+
+  &_light
+    background-color: color-mix(in srgb, transparent, var(--lb-colors-light) var(--header-opacity))
+
+    &::before
+      content: " "
+      pointer-events: none
+      opacity: var(--header-opacity, 1)
+      position: absolute
+      inset: 0
+      left: -50px
+      box-shadow: 25px -15px 35px 0px var(--lb-colors-dark, grey)

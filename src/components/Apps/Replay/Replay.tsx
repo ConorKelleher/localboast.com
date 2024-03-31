@@ -53,9 +53,9 @@ const Replay = () => {
 
   return (
     <Center h="100%" w="100%">
-      <Stack w="80%" align="center">
+      <Stack w="100%" h="100%" align="center">
         <Code
-          style={{ width: "100%", height: 300 }}
+          style={{ width: "100%", height: "100%" }}
           colorScheme={computedColorScheme}
           editable
           codeProps={{

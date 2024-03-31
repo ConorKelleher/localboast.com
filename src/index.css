@@ -252,14 +252,14 @@
 }
 
 * {
-  font-family: "Urbanist";
+  font-family: "Urbanist", Helvetica, sans-serif !important;
 }
 
 pre {
-  font-family: "Fira Code";
+  font-family: "Fira Code", Courier, monospace !important;
 }
 pre * {
-  font-family: "Fira Code";
+  font-family: "Fira Code", Courier, monospace !important;
 }
 
 /* html { */

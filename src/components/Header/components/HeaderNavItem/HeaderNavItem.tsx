@@ -42,7 +42,7 @@ export interface HeaderNavItemProps {
   iconColorAttribute?: "color" | "fill";
   childLinks?: HeaderNavDropdownItemProps[];
 }
-export const DEFAULT_HEADER_NAV_ITEM_PROPS = {
+const HEADER_NAV_ITEM_DEFAULT_PROPS = {
   iconColorAttribute: "color",
   childLinks: [],
 };
@@ -71,7 +71,7 @@ const MENU_ITEM_REVEAL_DELAY = MENU_OPEN_DELAY + 300;
 
 const HeaderNavItem = (props: HeaderNavItemProps) => {
   const mergedProps = {
-    ...DEFAULT_HEADER_NAV_ITEM_PROPS,
+    ...HEADER_NAV_ITEM_DEFAULT_PROPS,
     ...props,
   };
   const { colorScheme } = useMantineColorScheme();

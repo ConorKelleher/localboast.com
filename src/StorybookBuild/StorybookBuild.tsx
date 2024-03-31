@@ -66,6 +66,7 @@ const StorybookBuild = (props: StorybookBuildProps) => {
         style={{
           minWidth: "100%",
           minHeight: "100%",
+          marginBottom: -10, // account for scrollbars forcing their way into my UI
         }}
         ref={props.onChangeIframeRef}
         src={props.url}
