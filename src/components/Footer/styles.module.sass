@@ -1,3 +1,6 @@
+.footer_wrapper
+  display: inline
+
 .footer
   // max-height and overflow to allow footer scroll on very small screens
   max-height: calc(var(--vh, 1vh) * 100)
@@ -9,37 +12,51 @@
   z-index: 0
   // display: grid
   padding: 25px 0
-  display: grid
-  gap: 0
-  grid-template-columns: repeat(4, 1fr)
+  display: flex
+  // gap: 0
+  // grid-template-columns: repeat(4, 1fr)
   flex-wrap: wrap
-  gap: 30px
+  gap: 30px 0
   padding: 30px
   // grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
 
   > div
     // 201 empircally based on "Tip Me Live on Stream!"
-    width: 201px
+    // width: 25%
+    justify-content: center
     white-space: nowrap
     display: flex
-    margin: 0 auto
-
+    margin-top: 0
+    margin-bottom: 0
+    margin-left: auto
+    margin-right: auto
+    > div
+      width: 201px
 
   @media (max-width: $mantine-breakpoint-md)
-    grid-template-columns: repeat(2, 1fr)
+    // grid-template-columns: repeat(2, 1fr)
+    > div
+      width: 50%
   
   @media (max-width: $mantine-breakpoint-xs)
     > div
-      width: 150px
+      width: 50%
       white-space: unset
+      > div
+        width: 150px
       *
         font-size: $mantine-font-size-sm
   @media (max-width: 400px)
     > div
-      width: 100px
       white-space: unset
-    *
-      font-size: $mantine-font-size-xs !important
+      > div
+        width: 100px
+      *
+        font-size: $mantine-font-size-xs !important
+
+.affix
+  @media (max-width: $mantine-breakpoint-xs)
+    display: none
 
 .footer_anchor
   display: flex

@@ -58,59 +58,67 @@ const Footer = forwardRef<HTMLDivElement, FooterProps>((props, ref) => {
           setFooterEl(ref);
         }
       }}
+      className={styles.footer_wrapper}
     >
-      <Transition transition="slide-up" mounted={delayedFooterWithinRange}>
-        {(transitionStyles) => (
-          <Box
-            id="page-footer"
-            className={styles.footer}
-            ref={ref}
-            style={{ backgroundColor, display: delayedFooterWithinRange ? undefined : "none", ...transitionStyles }}
-          >
-            <Stack>
-              <Text size="md" fw="700">
-                Contact
-              </Text>
-              <FooterAnchor href={LINKS.MAILTO}>{getCopy("email")}</FooterAnchor>
-              <FooterAnchor href={LINKS.DISCORD}>{getCopy("discord")}</FooterAnchor>
-            </Stack>
-            <Stack>
-              <Text size="md" fw="700">
-                {getCopy("policies")}
-              </Text>
-              <FooterAnchor href={LINKS.COOKIE_POLICY}>{getCopy("cookiePolicy")}</FooterAnchor>
-              <FooterAnchor href={LINKS.PRIVACY_POLICY}>{getCopy("privacyPolicy")}</FooterAnchor>
-            </Stack>
-            <Stack>
-              <Text size="md" fw="700">
-                Other Resources
-              </Text>
-              <FooterAnchor href={LINKS.LIB_REPO}>{getCopy("githubLib")}</FooterAnchor>
-              <FooterAnchor href={LINKS.SITE_REPO}>{getCopy("githubSite")}</FooterAnchor>
-              <FooterAnchor href={LINKS.YOUTUBE}>{getCopy("youtube")}</FooterAnchor>
-              <FooterAnchor href={LINKS.TWITCH}>{getCopy("twitch")}</FooterAnchor>
-            </Stack>
-            <Stack>
-              <Text size="md" fw="700">
-                {getCopy("support")}
-              </Text>
-              <FooterAnchor href={LINKS.PATREON}>
-                <PatreonLogo fill={iconColor} />
-                {getCopy("becomeAPatron")}
-              </FooterAnchor>
-              <FooterAnchor href={LINKS.SE_TIP}>
-                <TwitchLogo fill={iconColor} />
-                {getCopy("tipOnSE")}
-              </FooterAnchor>
-              <FooterAnchor href={LINKS.KO_FI}>
-                <KoFiLogo fill={iconColor} />
-                {getCopy("buyKoFi")}
-              </FooterAnchor>
-            </Stack>
-          </Box>
-        )}
-      </Transition>
-      <Affix visibleFrom="sm" position={{ bottom: 20, right: 20 }}>
+      <Box
+        id="page-footer"
+        className={styles.footer}
+        ref={ref}
+        style={{
+          backgroundColor,
+          display: delayedFooterWithinRange ? undefined : "none",
+        }}
+      >
+        <div>
+          <Stack>
+            <Text size="md" fw="700">
+              Contact
+            </Text>
+            <FooterAnchor href={LINKS.MAILTO}>{getCopy("email")}</FooterAnchor>
+            <FooterAnchor href={LINKS.DISCORD}>{getCopy("discord")}</FooterAnchor>
+          </Stack>
+        </div>
+        <div>
+          <Stack>
+            <Text size="md" fw="700">
+              {getCopy("policies")}
+            </Text>
+            <FooterAnchor href={LINKS.COOKIE_POLICY}>{getCopy("cookiePolicy")}</FooterAnchor>
+            <FooterAnchor href={LINKS.PRIVACY_POLICY}>{getCopy("privacyPolicy")}</FooterAnchor>
+          </Stack>
+        </div>
+        <div>
+          <Stack>
+            <Text size="md" fw="700">
+              Other Resources
+            </Text>
+            <FooterAnchor href={LINKS.LIB_REPO}>{getCopy("githubLib")}</FooterAnchor>
+            <FooterAnchor href={LINKS.SITE_REPO}>{getCopy("githubSite")}</FooterAnchor>
+            <FooterAnchor href={LINKS.YOUTUBE}>{getCopy("youtube")}</FooterAnchor>
+            <FooterAnchor href={LINKS.TWITCH}>{getCopy("twitch")}</FooterAnchor>
+          </Stack>
+        </div>
+        <div>
+          <Stack>
+            <Text size="md" fw="700">
+              {getCopy("support")}
+            </Text>
+            <FooterAnchor href={LINKS.PATREON}>
+              <PatreonLogo fill={iconColor} />
+              {getCopy("becomeAPatron")}
+            </FooterAnchor>
+            <FooterAnchor href={LINKS.SE_TIP}>
+              <TwitchLogo fill={iconColor} />
+              {getCopy("tipOnSE")}
+            </FooterAnchor>
+            <FooterAnchor href={LINKS.KO_FI}>
+              <KoFiLogo fill={iconColor} />
+              {getCopy("buyKoFi")}
+            </FooterAnchor>
+          </Stack>
+        </div>
+      </Box>
+      <Affix position={{ bottom: 20, right: 20 }} className={styles.affix}>
         <Transition transition="slide-up" mounted={delayedFooterWithinRange}>
           {(transitionStyles) => (
             <Button

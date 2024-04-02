@@ -65,7 +65,7 @@ const Header = (props: HeaderProps) => {
     >
       <Group wrap="nowrap">
         <HomeIcon />
-        <Haptic focusScale={0.7} events={{ focus: true }}>
+        <Haptic focusScaleMultiplier={0.7} events={{ focus: true }}>
           <DarkSideToggle />
         </Haptic>
       </Group>

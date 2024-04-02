@@ -86,7 +86,7 @@ const TextSegment = (props: TextSegmentProps) => {
   );
 
   return link ? (
-    <Haptic focusScale={0.15} clickScale={0.15}>
+    <Haptic focusScaleMultiplier={0.15} clickScaleMultiplier={0.15}>
       <Link to={link} style={{ height: "fit-content", width: "fit-content" }}>
         {content}
       </Link>
