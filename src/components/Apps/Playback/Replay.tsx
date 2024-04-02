@@ -3,6 +3,7 @@ import { IconTrash } from "@tabler/icons-react";
 import { DEFAULT_COLOR_SCHEME } from "constants/preferences";
 import Code from "localboast/components/Code";
 import useAnimatedText from "localboast/hooks/useAnimatedText";
+import usePageTitle from "localboast/hooks/usePageTitle";
 import { useState } from "react";
 
 const getPersistedPageData = () => {
@@ -16,7 +17,8 @@ const getPersistedActivePageIndex = () => {
   return 0;
 };
 
-const Replay = () => {
+const Playback = () => {
+  usePageTitle("Playback - LocalBoast");
   const [backgroundColor, setBackgroundColor] = useState<string | undefined>();
   const [pageData, setPageData] = useState(getPersistedPageData);
   const [activePageIndex, setActivePageIndex] = useState(getPersistedActivePageIndex);
@@ -92,7 +94,12 @@ const Replay = () => {
           <Button onClick={onAddNewPage}>+</Button>
         </Group>
         <Group align="center">
-          <ColorInput size="md" key={backgroundColor ? 1 : 0} value={backgroundColor} onChange={setBackgroundColor} />
+          <ColorInput
+            size="md"
+            // key={backgroundColor ? 1 : 0}
+            value={backgroundColor}
+            onChange={setBackgroundColor}
+          />
           {!!backgroundColor && (
             <Button onClick={() => setBackgroundColor(undefined)} color="red" variant="subtle">
               <IconTrash />
@@ -105,4 +112,4 @@ const Replay = () => {
   );
 };
 
-export default Replay;
+export default Playback;

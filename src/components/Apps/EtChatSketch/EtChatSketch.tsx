@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import useTwitchChat from "localboast/hooks/useTwitchChat";
+import useLocalStorage from "localboast/hooks/useLocalStorage";
 import { LS_KEY_TWITCH_CHANNEL } from "localboast/constants/twitchConstants";
 import styles from "./styles.module.sass";
 import { AuthStep, JoinStep, LoadStep, PlayStep } from "./components/Steps";
@@ -7,6 +8,8 @@ import { LS_ET_CHAT_SKETCH_LINES, TWITCH_CHAT_BOT_CLIENT_ID } from "constants/tw
 import Panel from "./components/Panel";
 import DebugPanel from "./components/Steps/DebugPanel";
 import { PanelKnobProps } from "./components/Panel/Panel";
+import { last } from "localboast/utils/arrayHelpers";
+import usePageTitle from "localboast/hooks/usePageTitle";
 
 enum Step {
   Loading,
@@ -15,90 +18,85 @@ enum Step {
   Play,
 }
 
-export type Coords = [number, number];
+export type Coordinate = [number, number];
+const DEFAULT_START_COORDINATE: Coordinate = [0, 0];
 
-const getNewCoordinateFromMessage = (currentCoords: Coords, multiplier: number, message: string) => {
-  const newCoords: Coords = [...currentCoords];
+const getNewCoordinateFromMessage = (currentCoordinates: Coordinate[] | null, multiplier: number, message: string) => {
+  const newCoordinate: Coordinate = currentCoordinates ? [...last(currentCoordinates)] : DEFAULT_START_COORDINATE;
   const messageDown = message.toLocaleLowerCase();
   let hasMoved = false;
 
   if (messageDown.includes("up")) {
-    newCoords[1] -= multiplier;
+    newCoordinate[1] -= multiplier;
     hasMoved = true;
   }
   if (messageDown.includes("down")) {
-    newCoords[1] += multiplier;
+    newCoordinate[1] += multiplier;
     hasMoved = true;
   }
   if (messageDown.includes("left")) {
-    newCoords[0] -= multiplier;
+    newCoordinate[0] -= multiplier;
     hasMoved = true;
   }
   if (messageDown.includes("right")) {
-    newCoords[0] += multiplier;
+    newCoordinate[0] += multiplier;
     hasMoved = true;
   }
 
-  return hasMoved ? newCoords : null;
-};
-
-const getInitialCoordinateData = (startCoordsFallback: Coords) => {
-  const persistedLinesString = localStorage.getItem(LS_ET_CHAT_SKETCH_LINES);
-  let coords = [startCoordsFallback];
-  if (persistedLinesString) {
-    try {
-      coords = JSON.parse(persistedLinesString);
-    } catch (e) {
-      // Failed to parse persisted drawing, just clear persistence
-      localStorage.removeItem(LS_ET_CHAT_SKETCH_LINES);
-    }
-  }
-  return coords;
+  return hasMoved ? newCoordinate : null;
 };
 
 const EtChatSketch = () => {
+  usePageTitle("Et-Chat-Sketch - LocalBoast");
   const iframeContainerRef = useRef<HTMLDivElement | null>(null);
-  const [channel, setChannel] = useState<string | null>(localStorage.getItem(LS_KEY_TWITCH_CHANNEL));
-  const [startCoords] = useState<Coords>([0, 0]);
+  const [channel, setChannel] = useLocalStorage(LS_KEY_TWITCH_CHANNEL);
+  const [lsLineCoordinates, setLineCoordinates] = useLocalStorage<Coordinate[]>(LS_ET_CHAT_SKETCH_LINES, {
+    parse: JSON.parse,
+    stringify: JSON.stringify,
+  });
+  // Creating a non-nullable version here so we can pass stable array to child component
+  const lineCoordinates = useMemo(() => lsLineCoordinates || [DEFAULT_START_COORDINATE], [lsLineCoordinates]);
+  const [startCoordinate] = useState<Coordinate>(DEFAULT_START_COORDINATE);
   const [leftRotation, setLeftRotation] = useState(0);
   const [rightRotation, setRightRotation] = useState(0);
-  const [lineCoords, setLineCoords] = useState<Coords[]>(() => getInitialCoordinateData(startCoords));
   const [multiplier, setMultiplier] = useState(10);
   const handleNewMessages = useCallback(
     (newMessages: string[]) => {
-      setLineCoords((oldCoords) => {
-        let updatedCoords = oldCoords;
+      setLineCoordinates((oldCoordinates) => {
+        let updatedCoordinates = oldCoordinates || [];
         newMessages.forEach((newMessage) => {
-          const newCoords = getNewCoordinateFromMessage(oldCoords[oldCoords.length - 1], multiplier, newMessage);
-          if (newCoords) {
-            const prevCoords = updatedCoords[updatedCoords.length - 1];
+          const newCoordinate = getNewCoordinateFromMessage(oldCoordinates, multiplier, newMessage);
+          if (newCoordinate) {
+            const prevCoordinate = last(updatedCoordinates);
 
-            if (newCoords[0] !== prevCoords[0]) {
-              setLeftRotation((oldRotation) => {
-                if (newCoords[0] > prevCoords[0]) {
-                  return oldRotation + multiplier;
-                } else {
-                  return oldRotation - multiplier;
-                }
-              });
-            }
-            if (newCoords[1] !== prevCoords[1]) {
-              setRightRotation((oldRotation) => {
-                if (newCoords[1] > prevCoords[1]) {
-                  return oldRotation - multiplier;
-                } else {
-                  return oldRotation + multiplier;
-                }
-              });
+            if (prevCoordinate) {
+              if (newCoordinate[0] !== prevCoordinate[0]) {
+                setLeftRotation((oldRotation) => {
+                  if (newCoordinate[0] > prevCoordinate[0]) {
+                    return oldRotation + multiplier;
+                  } else {
+                    return oldRotation - multiplier;
+                  }
+                });
+              }
+              if (newCoordinate[1] !== prevCoordinate[1]) {
+                setRightRotation((oldRotation) => {
+                  if (newCoordinate[1] > prevCoordinate[1]) {
+                    return oldRotation - multiplier;
+                  } else {
+                    return oldRotation + multiplier;
+                  }
+                });
+              }
             }
 
-            updatedCoords = [...updatedCoords, newCoords];
+            updatedCoordinates = [...updatedCoordinates, newCoordinate];
           }
         });
-        return updatedCoords;
+        return updatedCoordinates;
       });
     },
-    [multiplier]
+    [multiplier, setLineCoordinates]
   );
   const {
     authIFrameRef,
@@ -160,27 +158,25 @@ const EtChatSketch = () => {
           buttonText: "Clear",
           onClick: () => {
             clearChats();
-            setLineCoords([startCoords]);
+            setLineCoordinates([startCoordinate]);
           },
           rotation: rightRotation,
         };
         break;
     }
     return newKnobProps;
-  }, [activeStep, channel, startCoords, clearChats, leaveChannel, joinChannel, logOut, leftRotation, rightRotation]);
-
-  // Persist any line changes to LS
-  useEffect(() => {
-    localStorage.setItem(LS_ET_CHAT_SKETCH_LINES, JSON.stringify(lineCoords));
-  }, [lineCoords]);
-
-  useEffect(() => {
-    if (channel) {
-      localStorage.setItem(LS_KEY_TWITCH_CHANNEL, channel);
-    } else {
-      localStorage.removeItem(LS_KEY_TWITCH_CHANNEL);
-    }
-  }, [channel]);
+  }, [
+    activeStep,
+    channel,
+    startCoordinate,
+    setLineCoordinates,
+    clearChats,
+    leaveChannel,
+    joinChannel,
+    logOut,
+    leftRotation,
+    rightRotation,
+  ]);
 
   return (
     <div
@@ -201,7 +197,7 @@ const EtChatSketch = () => {
         {activeStep === Step.Join && (
           <JoinStep chatError={chatError} username={username!} channel={channel} setChannel={setChannel} />
         )}
-        {activeStep === Step.Play && <PlayStep lineCoords={lineCoords} />}
+        {activeStep === Step.Play && <PlayStep lineCoordinates={lineCoordinates} />}
       </Panel>
       {activeStep === Step.Play && (
         <DebugPanel

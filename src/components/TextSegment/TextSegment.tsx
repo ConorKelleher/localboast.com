@@ -21,8 +21,8 @@ const TextSegment = (props: TextSegmentProps) => {
   const verticalText = layout === TextSegmentLayout.hybrid;
   const titleTag = title ? (
     <svg
-      width={verticalText ? 45 : "100%"}
-      height={verticalText ? "calc(100% - 20px)" : 45}
+      width={verticalText ? "45px" : "100%"}
+      height={verticalText ? "calc(100% - 20px)" : "45px"}
       viewBox={verticalText ? "0 0 45 360" : "0 0 360 45"}
       className={styles.title}
     >

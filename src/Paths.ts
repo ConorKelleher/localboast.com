@@ -7,10 +7,9 @@ const Paths = {
   YouTubePage: "live/YouTube",
   TwitchPage: "live/twitch",
   TwitchAuthPage: "twitch_auth",
-  UnwrappedRoot: "embed",
   AppsRoot: "apps",
   EtChatSketch: "sketch",
-  Replay: "replay",
+  Playback: "playback",
   AppsPage: "apps",
 };
 

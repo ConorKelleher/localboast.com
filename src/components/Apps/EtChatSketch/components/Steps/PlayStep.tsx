@@ -1,21 +1,24 @@
 import { useMemo } from "react";
-import { Coords } from "../../EtChatSketch";
+import { Coordinate } from "../../EtChatSketch";
+import { first } from "localboast/utils/arrayHelpers";
 
 interface PlayStepProps {
-  lineCoords: Coords[];
+  lineCoordinates: Coordinate[];
 }
 
 const PlayStep = (props: PlayStepProps) => {
   const pathD = useMemo(() => {
-    let currentCoords: Coords;
-    return `${props.lineCoords
+    let currentCoords: Coordinate;
+    return `${props.lineCoordinates
       .map((coords, index) => {
         currentCoords = coords;
         return `${index === 0 ? "M" : "L"}${currentCoords[0]} ${currentCoords[1]}`;
       })
       .join("")}`;
-  }, [props.lineCoords]);
-  const hasDrawnLine = props.lineCoords.length > 1;
+  }, [props.lineCoordinates]);
+  const hasDrawnLine = props.lineCoordinates.length > 1;
+  const hasAnyCoords = !!props.lineCoordinates.length;
+  const startCoord = first(props.lineCoordinates) || [0, 0];
 
   return (
     <svg
@@ -25,11 +28,12 @@ const PlayStep = (props: PlayStepProps) => {
       height="100%"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {hasDrawnLine ? (
-        <path d={pathD} strokeWidth={2} stroke="black" fill="transparent" />
-      ) : (
-        <circle rx={props.lineCoords[0][0]} ry={props.lineCoords[0][1]} r={5} />
-      )}
+      {hasAnyCoords &&
+        (hasDrawnLine ? (
+          <path d={pathD} strokeWidth={2} stroke="black" fill="transparent" />
+        ) : (
+          <circle rx={startCoord[0]} ry={startCoord[1]} r={5} />
+        ))}
     </svg>
   );
 };

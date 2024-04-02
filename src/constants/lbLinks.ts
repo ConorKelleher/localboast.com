@@ -9,5 +9,6 @@ export const SITE_REPO = "https://github.com/ConorKelleher/localboast.com";
 // export const YOUTUBE = "https://www.youtube.com/channel/UCt-IaL4qQsOU6_rbS7zky1Q/live";
 export const YOUTUBE = "https://youtube.com/@localboast/live";
 export const TWITCH = "https://twitch.tv/localboast";
+export const LINKTREE = "https://linktr.ee/localboast";
 export const COOKIE_POLICY = "/assets/cookie_policy.html";
 export const PRIVACY_POLICY = "/assets/privacy_policy.html";

@@ -10,4 +10,5 @@ export const ExternalLinkMappings = {
   youtube: LB_LINKS.YOUTUBE,
   twitch: LB_LINKS.TWITCH,
   github: LB_LINKS.LIB_REPO,
+  links: LB_LINKS.LINKTREE,
 };

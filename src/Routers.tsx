@@ -9,12 +9,10 @@ import LivePage from "Pages/LivePage";
 import TwitchPage from "Pages/LivePage/Pages/TwitchPage";
 import YouTubePage from "Pages/LivePage/Pages/YouTubePage";
 import Root from "Pages/Root";
-import { UnwrappedRoot } from "Pages/Root";
 import StorybookPage from "Pages/StorybookPage";
 import TwitchAuthPage from "Pages/TwitchAuthPage";
 import Paths from "Paths";
-import EtChatSketch from "components/Apps/EtChatSketch";
-import Replay from "components/Apps/Replay";
+import { ALL_APPS } from "components/Apps";
 import { ReactNode } from "react";
 
 type Route = {
@@ -34,10 +32,6 @@ const wrapRoutesInErrors = (routes: Route[]): Route[] =>
   );
 
 export const RootRouter = wrapRoutesInErrors([
-  ...Object.keys(ExternalLinkMappings).map((externalLinkPath) => ({
-    path: externalLinkPath,
-    element: <ExternalLink />,
-  })),
   {
     path: Paths.Root,
     element: <Root />,
@@ -73,10 +67,6 @@ export const RootRouter = wrapRoutesInErrors([
         element: <TwitchPage />,
       },
       {
-        path: Paths.TwitchAuthPage,
-        element: <TwitchAuthPage />,
-      },
-      {
         path: Paths.AppsPage,
         element: <AppsPage />,
         children: [
@@ -84,30 +74,24 @@ export const RootRouter = wrapRoutesInErrors([
             path: "",
             element: <AppsPageIndex />,
           },
-          {
-            path: Paths.EtChatSketch,
-            element: <EtChatSketch />,
-          },
-          {
-            path: Paths.Replay,
-            element: <Replay />,
-          },
+          ...ALL_APPS.map((app) => ({
+            path: app.path,
+            element: <app.Component />,
+          })),
         ],
       },
     ],
   },
+  ...Object.keys(ExternalLinkMappings).map((externalLinkPath) => ({
+    path: externalLinkPath,
+    element: <ExternalLink />,
+  })),
+  ...ALL_APPS.map((app) => ({
+    path: app.path,
+    element: <app.Component />,
+  })),
   {
-    path: Paths.UnwrappedRoot,
-    element: <UnwrappedRoot />,
-    children: [
-      {
-        path: Paths.EtChatSketch,
-        element: <EtChatSketch />,
-      },
-      {
-        path: Paths.Replay,
-        element: <Replay />,
-      },
-    ],
+    path: Paths.TwitchAuthPage,
+    element: <TwitchAuthPage />,
   },
 ]);

@@ -27,7 +27,7 @@ const externalAnchorProps = {
 
 const HomePage = () => {
   const [titleTextIndex, setTitleTextIndex] = useState(0);
-  usePageTitle("Making Web Development Harder for Myself | LocalBoast");
+  usePageTitle("LocalBoast - Making Web Development Harder for Myself");
 
   useInterval(
     () => setTitleTextIndex((oldIndex) => (oldIndex + 1) % TITLE_TEXTS.length),
