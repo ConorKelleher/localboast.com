@@ -5,6 +5,7 @@ export enum TextSegmentLayout {
   vertical = "vertical",
   horizontal = "horizontal",
   hybrid = "hybrid",
+  auto = "auto",
 }
 export interface TextSegmentProps {
   theme?: ComponentTheme | keyof typeof ComponentTheme;
@@ -16,6 +17,6 @@ export interface TextSegmentProps {
 }
 
 export const TEXT_SEGMENT_DEFAULT_PROPS = {
-  layout: TextSegmentLayout.horizontal,
+  layout: TextSegmentLayout.auto,
   theme: ComponentTheme.primary,
 };

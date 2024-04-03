@@ -1,28 +1,27 @@
 import TextSegment from "components/TextSegment";
 import usePageTitle from "localboast/hooks/usePageTitle";
 
-import EtChatSketchCover from "../../assets/wip/EtchABoast.png";
+import EtChatSketchCover from "../../assets/screenshots/EtchABoast.png";
+import PlaybackCover from "../../assets/screenshots/Playback.gif";
 import styles from "./styles.module.sass";
-import { TextSegmentLayout } from "components/TextSegment/constants";
+import { TextSegmentProps } from "components/TextSegment/constants";
 import { ComponentTheme } from "theme";
 import Paths from "Paths";
 
-type SectionData = {
-  title: string;
-  body: string;
-  imgSrc: string;
-  layout: TextSegmentLayout;
-  theme?: ComponentTheme;
-  link?: string;
-};
-const SECTIONS: SectionData[] = [
+const SECTIONS: TextSegmentProps[] = [
   {
     title: "Et-Chat-Sketch",
     body: "Proof of concept for my useTwitchChat hook. Playing on the visual of an Etcha-Sketch, having a canvas that viewers can draw a line on by interacting with chat.",
     imgSrc: EtChatSketchCover,
-    layout: TextSegmentLayout.hybrid,
     theme: ComponentTheme.secondary,
     link: `/${Paths.AppsPage}/${Paths.EtChatSketch}`,
+  },
+  {
+    title: "Playback",
+    body: "In-progress app to allow paged playback of changes to a code editor. Useful for demos and recordings - has changeable background colour to allow for easy chroma-keying (greenscreen).",
+    imgSrc: PlaybackCover,
+    theme: ComponentTheme.primary,
+    link: `/${Paths.AppsPage}/${Paths.Playback}`,
   },
 ];
 

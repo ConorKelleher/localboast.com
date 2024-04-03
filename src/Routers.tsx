@@ -1,6 +1,6 @@
 import AppsPage from "Pages/AppsPage";
 import AppsPageIndex from "Pages/AppsPage/AppsPageIndex";
-import ErrorPage from "Pages/ErrorPage";
+import ErrorPage, { ErrorPageContent } from "Pages/ErrorPage";
 import ExternalLink from "Pages/ExternalLink";
 import { ExternalLinkMappings } from "Pages/ExternalLink/constants";
 import HomePage from "Pages/HomePage";
@@ -26,7 +26,7 @@ const wrapRoutesInErrors = (routes: Route[]): Route[] =>
     (route) =>
       ({
         ...route,
-        errorElement: route.errorElement || <ErrorPage />,
+        errorElement: route.errorElement || <ErrorPageContent />,
         children: route.children ? wrapRoutesInErrors(route.children) : route.children,
       } as Route)
   );
@@ -35,6 +35,7 @@ export const RootRouter = wrapRoutesInErrors([
   {
     path: Paths.Root,
     element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: Paths.HomePage,

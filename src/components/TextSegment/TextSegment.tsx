@@ -1,4 +1,4 @@
-import { Image, useComputedColorScheme } from "@mantine/core";
+import { Image, useComputedColorScheme, useMantineTheme } from "@mantine/core";
 import cx from "localboast/utils/cx";
 import generateRandomId from "localboast/utils/generateRandomId";
 import { merge } from "localboast/utils/objectHelpers";
@@ -7,9 +7,35 @@ import { TEXT_SEGMENT_DEFAULT_PROPS, TextSegmentProps, TextSegmentLayout } from 
 import { ComponentTheme, LB_THEMES } from "theme";
 import Haptic from "localboast/components/Haptic";
 import { Link } from "react-router-dom";
+import { useMediaQuery } from "@mantine/hooks";
+
+const useTextSegmentLayout = (chosenLayout: TextSegmentLayout) => {
+  const mantineTheme = useMantineTheme();
+  const isWideLayout = useMediaQuery(`(min-width: ${mantineTheme.breakpoints.lg})`);
+  const isNarrowLayout = useMediaQuery(`(max-width: ${mantineTheme.breakpoints.sm})`);
+  let layout = TextSegmentLayout.hybrid;
+  if (chosenLayout !== TextSegmentLayout.auto) {
+    layout = chosenLayout;
+  } else {
+    const isMediumLayout = !(isWideLayout || isNarrowLayout);
+    switch (true) {
+      case isWideLayout:
+        layout = TextSegmentLayout.horizontal;
+        break;
+      case isMediumLayout:
+        layout = TextSegmentLayout.hybrid;
+        break;
+      case isNarrowLayout:
+        layout = TextSegmentLayout.vertical;
+        break;
+    }
+  }
+  return layout;
+};
 
 const TextSegment = (props: TextSegmentProps) => {
-  const { body, layout, imgSrc, title, theme, link } = merge(TEXT_SEGMENT_DEFAULT_PROPS, props);
+  const { body, layout: propsLayout, imgSrc, title, theme, link } = merge(TEXT_SEGMENT_DEFAULT_PROPS, props);
+  const layout = useTextSegmentLayout(propsLayout);
   const colorScheme = useComputedColorScheme("dark");
   const activeTheme = LB_THEMES[theme as ComponentTheme];
   const color = activeTheme[colorScheme];
@@ -21,14 +47,14 @@ const TextSegment = (props: TextSegmentProps) => {
   const verticalText = layout === TextSegmentLayout.hybrid;
   const titleTag = title ? (
     <svg
-      width={verticalText ? "45px" : "100%"}
-      height={verticalText ? "calc(100% - 20px)" : "45px"}
+      width={verticalText ? "45px" : "calc(100% - 20px)"}
+      height={verticalText ? "100%" : "45px"}
       viewBox={verticalText ? "0 0 45 360" : "0 0 360 45"}
       className={styles.title}
     >
       <defs>
         <filter id={`drop-shadow-${id}`}>
-          <feFlood flood-color={color} />
+          <feFlood floodColor={color} />
 
           <feComposite operator="out" in2="SourceGraphic" />
 
@@ -43,7 +69,9 @@ const TextSegment = (props: TextSegmentProps) => {
         y="50%"
         stroke={color}
         filter={`url(#drop-shadow-${id})`}
-        transform={verticalText ? "translate(197, -10) rotate(90)" : undefined}
+        style={{
+          transform: verticalText ? `translate(197px, 155px) rotate(90deg)` : undefined,
+        }}
       >
         {title}
       </text>
@@ -85,11 +113,19 @@ const TextSegment = (props: TextSegmentProps) => {
     </div>
   );
 
+  // return link ? (
+  //   <Haptic focusScaleMultiplier={0.15} clickScaleMultiplier={0.15} component={Link} to={link}>
+  //     {content}
+  //   </Haptic>
+  // ) : (
+  //   content
+  // );
   return link ? (
-    <Haptic focusScaleMultiplier={0.15} clickScaleMultiplier={0.15}>
-      <Link to={link} style={{ height: "fit-content", width: "fit-content" }}>
-        {content}
-      </Link>
+    // <Haptic focusScaleMultiplier={0.15} clickScaleMultiplier={0.15}>
+    //   <Link to={link}>{content}</Link>
+    // </Haptic>
+    <Haptic focusScaleMultiplier={0.15} clickScaleMultiplier={0.15} component={Link} to={link}>
+      {content}
     </Haptic>
   ) : (
     content
