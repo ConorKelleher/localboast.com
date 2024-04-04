@@ -1,7 +1,7 @@
 import StorybookBuild from "StorybookBuild";
 import styles from "./styles.module.sass";
 import { Location, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import usePageTitle from "localboast/hooks/usePageTitle";
 import { capitalize } from "localboast/utils/stringHelpers";
 import useUpdatingRef from "localboast/hooks/useUpdatingRef";
@@ -91,6 +91,8 @@ const translateToUglySearch = (location: Location) => {
 };
 
 const StorybookPage = () => {
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const iframeLoadedRef = useRef(false);
   const navigate = useNavigate();
   const location = useLocation();
   const pageTitle = useMemo(
@@ -108,6 +110,7 @@ const StorybookPage = () => {
   const errorRef = useRef<HTMLElement | null>();
 
   const setLocationRef = useUpdatingRef(({ search: newSearch, hash: newHash }: { search: string; hash: string }) => {
+    const onlyHashHasChanged = hashRef.current !== newHash && newSearch === searchRef.current;
     searchRef.current = newSearch;
     hashRef.current = newHash;
     const newLocation = translateFromUglySearch(
@@ -117,6 +120,9 @@ const StorybookPage = () => {
       },
       newSearch
     );
+    if (onlyHashHasChanged) {
+      navigator.clipboard.writeText(window.location.href.replace(/#.+/, `#${newHash}`));
+    }
     if (
       newLocation.pathname !== location.pathname ||
       newLocation.search !== location.search ||
@@ -137,21 +143,30 @@ const StorybookPage = () => {
     setLocationRef.current({ search, hash });
   }, [search, hash, setLocationRef]);
 
-  useEffect(() => {
-    return () => {
-      clearInterval(searchPollIntervalRef.current);
-    };
+  const clearLocationPollingInterval = useCallback(() => {
+    clearInterval(searchPollIntervalRef.current);
   }, []);
+
+  useEffect(() => {
+    return clearLocationPollingInterval;
+  }, [clearLocationPollingInterval]);
 
   const onIframeLoaded = () => {
     const iframeLoaded = iframeRef.current?.contentWindow?.document.getElementById("root");
     if (iframeLoaded) {
+      if (!iframeLoadedRef.current) {
+        iframeLoadedRef.current = true;
+        setIframeLoaded(true);
+      }
+      if (searchPollIntervalRef.current) {
+        clearInterval(searchPollIntervalRef.current);
+      }
       searchPollIntervalRef.current = setInterval(() => {
         const newLocation = iframeRef.current!.contentWindow!.location;
         const iframeSearch = newLocation.search;
         const iframeHash = newLocation.hash;
 
-        if (iframeSearch !== searchRef.current || iframeHash || hashRef.current) {
+        if (iframeSearch !== searchRef.current || iframeHash !== hashRef.current) {
           setLocationRef.current(newLocation);
         }
       }, 500);
@@ -171,6 +186,7 @@ const StorybookPage = () => {
   return (
     <div className={styles.storybookPage}>
       <StorybookBuild
+        style={{ opacity: iframeLoaded ? 1 : 0 }}
         url={initialUrl}
         onChangeIframeRef={onChangeIframe}
         onChangeErrorRef={(ref) => (errorRef.current = ref)}

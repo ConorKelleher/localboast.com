@@ -1,9 +1,11 @@
+import { CSSProperties } from "react";
 import classes from "./StorybookBuild.module.sass";
 
 interface StorybookBuildProps {
   url: string;
   onChangeIframeRef?: (ref: HTMLIFrameElement | null) => void;
   onChangeErrorRef?: (ref: HTMLElement | null) => void;
+  style?: CSSProperties;
 }
 /*
 unused attempt at making full storybook content sit flat on page
@@ -67,6 +69,7 @@ const StorybookBuild = (props: StorybookBuildProps) => {
           minWidth: "100%",
           minHeight: "100%",
           marginBottom: -10, // account for scrollbars forcing their way into my UI
+          ...props.style,
         }}
         ref={props.onChangeIframeRef}
         src={props.url}
