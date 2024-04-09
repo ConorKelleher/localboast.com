@@ -49,13 +49,15 @@ const getNewCoordinateFromMessage = (currentCoordinates: Coordinate[] | null, mu
 const EtChatSketch = () => {
   usePageTitle("Et-Chat-Sketch - LocalBoast");
   const iframeContainerRef = useRef<HTMLDivElement | null>(null);
-  const [channel, setChannel] = useLocalStorage(LS_KEY_TWITCH_CHANNEL);
-  const [lsLineCoordinates, setLineCoordinates] = useLocalStorage<Coordinate[]>(LS_ET_CHAT_SKETCH_LINES, {
-    parse: JSON.parse,
-    stringify: JSON.stringify,
-  });
-  // Creating a non-nullable version here so we can pass stable array to child component
-  const lineCoordinates = useMemo(() => lsLineCoordinates || [DEFAULT_START_COORDINATE], [lsLineCoordinates]);
+  const [channel, setChannel] = useLocalStorage(LS_KEY_TWITCH_CHANNEL, "");
+  const [lineCoordinates, setLineCoordinates] = useLocalStorage<Coordinate[]>(
+    LS_ET_CHAT_SKETCH_LINES,
+    [DEFAULT_START_COORDINATE],
+    {
+      parse: JSON.parse,
+      stringify: JSON.stringify,
+    }
+  );
   const [startCoordinate] = useState<Coordinate>(DEFAULT_START_COORDINATE);
   const [leftRotation, setLeftRotation] = useState(0);
   const [rightRotation, setRightRotation] = useState(0);

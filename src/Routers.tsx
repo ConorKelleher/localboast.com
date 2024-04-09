@@ -26,7 +26,6 @@ const wrapRoutesInErrors = (routes: Route[]): Route[] =>
     (route) =>
       ({
         ...route,
-        errorElement: route.errorElement || <ErrorPageContent />,
         children: route.children ? wrapRoutesInErrors(route.children) : route.children,
       } as Route)
   );

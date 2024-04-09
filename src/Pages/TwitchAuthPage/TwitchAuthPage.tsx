@@ -9,8 +9,8 @@ const TwitchAuthPage = () => {
   const location = useLocation();
   usePageTitle("Authenticating | LocalBoast");
   const { access_token, state } = qs.parse(location.hash.slice(1));
-  const [csrfToken, , clearCsrfToken] = useLocalStorage(LS_KEY_TWITCH_CSRF_TOKEN);
-  const [, setAuthToken] = useLocalStorage(LS_KEY_TWITCH_AUTH_TOKEN);
+  const [csrfToken, , clearCsrfToken] = useLocalStorage<string | null>(LS_KEY_TWITCH_CSRF_TOKEN, null);
+  const [, setAuthToken] = useLocalStorage<string | null>(LS_KEY_TWITCH_AUTH_TOKEN, null);
   const [error, setError] = useState(
     access_token
       ? null

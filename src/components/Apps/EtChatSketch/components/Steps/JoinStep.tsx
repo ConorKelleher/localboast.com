@@ -3,9 +3,9 @@ import styles from "./styles.module.sass";
 
 interface JoinStepProps {
   chatError: string | null;
-  channel: string | null;
+  channel: string;
   username: string;
-  setChannel: React.Dispatch<React.SetStateAction<string | null>>;
+  setChannel: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const JoinStep = (props: JoinStepProps) => {
