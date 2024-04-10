@@ -1,34 +1,54 @@
-import { ActionIcon, Button, Center, ColorInput, Group, Menu, Stack, useComputedColorScheme } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Center,
+  Checkbox,
+  ColorInput,
+  Group,
+  Menu,
+  Stack,
+  TextInput,
+  useComputedColorScheme,
+} from "@mantine/core";
 import useLocalStorage from "localboast/hooks/useLocalStorage";
 import { IconTrash } from "@tabler/icons-react";
-import { DEFAULT_COLOR_SCHEME } from "constants/preferences";
 import Code from "localboast/components/Code";
 import useAnimatedText from "localboast/hooks/useAnimatedText";
 import usePageTitle from "localboast/hooks/usePageTitle";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   LS_KEY_PLAYBACK_BACKGROUND,
   LS_KEY_PLAYBACK_CONTENTS,
   LS_KEY_PLAYBACK_PAGE_INDEX,
-} from "localboast/constants/twitchConstants";
+  LS_KEY_PLAYBACK_LANGUAGE,
+  LS_KEY_PLAYBACK_HIGHLIGHT,
+} from "./constants";
 
-const DEFAULT_BACKGROUND_COLOR = "#ffffff";
+const DEFAULT_BACKGROUND_COLOR_LIGHT = "#FCFCFC";
+const DEFAULT_BACKGROUND_COLOR_DARK = "#282C34";
 // Todo - add tutorial here via placeholder content
 const DEFAULT_PAGE_DATA = [""];
+const EMPTY_PAGE_DATA = [""];
 
 const Playback = () => {
   usePageTitle("Playback - LocalBoast");
+  const colorScheme = useComputedColorScheme();
+  const defaultBackgroundColor =
+    colorScheme === "dark" ? DEFAULT_BACKGROUND_COLOR_DARK : DEFAULT_BACKGROUND_COLOR_LIGHT;
   const [backgroundColor, setBackgroundColor] = useLocalStorage<string>(
     LS_KEY_PLAYBACK_BACKGROUND,
-    DEFAULT_BACKGROUND_COLOR
+    defaultBackgroundColor
   );
+  const backgroundColorWasDefaultRef = useRef(backgroundColor === defaultBackgroundColor);
   const [pageData, _setPageData] = useLocalStorage(LS_KEY_PLAYBACK_CONTENTS, DEFAULT_PAGE_DATA);
   const [activePageIndex, _setActivePageIndex] = useLocalStorage(LS_KEY_PLAYBACK_PAGE_INDEX, 0);
+  const [language, setLanguage] = useLocalStorage<string | undefined>(LS_KEY_PLAYBACK_LANGUAGE, "");
+  const [syntaxHighlight, setSyntaxHighlight] = useLocalStorage<boolean>(LS_KEY_PLAYBACK_HIGHLIGHT, true);
+  console.log(syntaxHighlight);
   const [shouldAnimate, setShouldAnimate] = useState(true);
   const activePageData = pageData[activePageIndex];
   const animatedText = useAnimatedText(activePageData);
   const textToDisplay = shouldAnimate ? animatedText : activePageData;
-  const computedColorScheme = useComputedColorScheme(DEFAULT_COLOR_SCHEME);
 
   const setPageData = useCallback((newData: React.SetStateAction<string[]>) => {
     setShouldAnimate(false);
@@ -44,12 +64,24 @@ const Playback = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (backgroundColorWasDefaultRef.current) {
+      setBackgroundColor(defaultBackgroundColor);
+    }
+    // Omit local storage setter since WE know it's a fixed reference
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultBackgroundColor]);
+
+  useEffect(() => {
+    backgroundColorWasDefaultRef.current = backgroundColor === defaultBackgroundColor;
+  }, [backgroundColor, defaultBackgroundColor]);
+
   const checkAllAreDefault = () => {
     return pageData.length === 1 && pageData[0] === "";
   };
 
   const clearAll = () => {
-    setPageData([""]);
+    setPageData(EMPTY_PAGE_DATA);
     setActivePageIndex(0);
   };
 
@@ -81,18 +113,15 @@ const Playback = () => {
   };
 
   return (
-    <Center h="100%" w="100%">
+    <Center h="100%" w="100%" pb={25}>
       <Stack w="100%" h="100%" align="center">
         <Code
-          style={{ width: "100%", height: "100%" }}
-          colorScheme={computedColorScheme}
+          key={`code_highlight-${syntaxHighlight}`}
+          language={language || undefined}
+          highlight={syntaxHighlight}
+          style={{ width: "100%", height: "100%", backgroundColor: backgroundColor }}
+          colorScheme={colorScheme}
           editable
-          codeProps={{
-            className: "language-javascript",
-            style: {
-              backgroundColor: backgroundColor,
-            },
-          }}
           onChange={onEditCurrentPage}
         >
           {textToDisplay}
@@ -148,10 +177,10 @@ const Playback = () => {
                   onChange={setBackgroundColor}
                   popoverProps={{ withinPortal: false }}
                 />
-                {backgroundColor !== DEFAULT_BACKGROUND_COLOR && (
+                {backgroundColor !== defaultBackgroundColor && (
                   <Button
                     style={{ position: "absolute", right: 0, top: 3, bottom: 0 }}
-                    onClick={() => setBackgroundColor(DEFAULT_BACKGROUND_COLOR)}
+                    onClick={() => setBackgroundColor(defaultBackgroundColor)}
                     color="red"
                     variant="subtle"
                   >
@@ -160,6 +189,24 @@ const Playback = () => {
                   </Button>
                 )}
               </Menu.Item>
+              <Menu.Divider />
+              <Menu.Item>
+                <Checkbox
+                  label="Syntax Highlight"
+                  checked={syntaxHighlight}
+                  onChange={(e) => {
+                    setSyntaxHighlight(e.target.checked);
+                  }}
+                />
+              </Menu.Item>
+              {syntaxHighlight && (
+                <>
+                  <Menu.Label>Language (leave blank for "auto")</Menu.Label>
+                  <Menu.Item component={Group} align="center" style={{ position: "relative", padding: 0 }}>
+                    <TextInput value={language} onChange={(e) => setLanguage(e.target.value)} />
+                  </Menu.Item>
+                </>
+              )}
             </Menu.Dropdown>
           </Menu>
         </Group>

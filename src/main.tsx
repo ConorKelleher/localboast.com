@@ -6,7 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RootRouter } from "Routers";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { appTheme } from "theme";
-import { attachCustomVH } from "localboast/utils";
+import attachCustomVH from "localboast/utils/attachCustomVH";
 // import { Notifications } from "@mantine/notifications";
 
 // Set up custom VH + resize detection so mobile sizes correctly

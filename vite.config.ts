@@ -31,6 +31,7 @@ export default defineConfig({
     },
     // preserveSymlinks: true,
   },
+  optimizeDeps: { exclude: ["localboast"] },
   build: {
     rollupOptions: {
       output: {

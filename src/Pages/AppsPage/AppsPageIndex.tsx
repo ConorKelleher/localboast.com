@@ -1,16 +1,19 @@
-import { Stack } from "@mantine/core";
-import Paths from "Paths";
+import { IN_PROGRESS_SECTIONS } from "Pages/InProgressPage/constants";
 import usePageTitle from "localboast/hooks/usePageTitle";
-import { Link } from "react-router-dom";
+import styles from "./styles.module.sass";
+import TextSegment from "components/TextSegment";
+
+const APPS_SECTIONS = [...IN_PROGRESS_SECTIONS];
 
 const AppsPageIndex = () => {
   usePageTitle("Apps | LocalBoast");
 
   return (
-    <Stack>
-      <Link to={Paths.EtChatSketch}>Et-Chat-Sketch</Link>
-      <Link to={Paths.Replay}>Replay</Link>
-    </Stack>
+    <div className={styles.sections}>
+      {APPS_SECTIONS.map((sectionData, index) => (
+        <TextSegment key={index} {...sectionData} />
+      ))}
+    </div>
   );
 };
 
