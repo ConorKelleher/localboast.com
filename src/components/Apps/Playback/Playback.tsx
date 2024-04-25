@@ -6,6 +6,7 @@ import {
   ColorInput,
   Group,
   Menu,
+  NumberInput,
   Stack,
   TextInput,
   useComputedColorScheme,
@@ -13,7 +14,7 @@ import {
 import useLocalStorage from "localboast/hooks/useLocalStorage";
 import { IconTrash } from "@tabler/icons-react";
 import Code from "localboast/components/Code";
-import useAnimatedText from "localboast/hooks/useAnimatedText";
+import useAnimatedText, { USE_ANIMATED_TEXT_DEFAULT_OPTIONS } from "localboast/hooks/useAnimatedText";
 import usePageTitle from "localboast/hooks/usePageTitle";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -22,6 +23,7 @@ import {
   LS_KEY_PLAYBACK_PAGE_INDEX,
   LS_KEY_PLAYBACK_LANGUAGE,
   LS_KEY_PLAYBACK_HIGHLIGHT,
+  LS_KEY_PLAYBACK_MS_PER_CHAR,
 } from "./constants";
 
 const DEFAULT_BACKGROUND_COLOR_LIGHT = "#FCFCFC";
@@ -42,12 +44,15 @@ const Playback = () => {
   const backgroundColorWasDefaultRef = useRef(backgroundColor === defaultBackgroundColor);
   const [pageData, _setPageData] = useLocalStorage(LS_KEY_PLAYBACK_CONTENTS, DEFAULT_PAGE_DATA);
   const [activePageIndex, _setActivePageIndex] = useLocalStorage(LS_KEY_PLAYBACK_PAGE_INDEX, 0);
-  const [language, setLanguage] = useLocalStorage<string | undefined>(LS_KEY_PLAYBACK_LANGUAGE, "");
-  const [syntaxHighlight, setSyntaxHighlight] = useLocalStorage<boolean>(LS_KEY_PLAYBACK_HIGHLIGHT, true);
-  console.log(syntaxHighlight);
+  const [language, setLanguage] = useLocalStorage(LS_KEY_PLAYBACK_LANGUAGE, "");
+  const [syntaxHighlight, setSyntaxHighlight] = useLocalStorage(LS_KEY_PLAYBACK_HIGHLIGHT, true);
+  const [msPerChar, setMsPerChar] = useLocalStorage(
+    LS_KEY_PLAYBACK_MS_PER_CHAR,
+    USE_ANIMATED_TEXT_DEFAULT_OPTIONS.msPerChar
+  );
   const [shouldAnimate, setShouldAnimate] = useState(true);
   const activePageData = pageData[activePageIndex];
-  const animatedText = useAnimatedText(activePageData);
+  const animatedText = useAnimatedText(activePageData, { msPerChar });
   const textToDisplay = shouldAnimate ? animatedText : activePageData;
 
   const setPageData = useCallback((newData: React.SetStateAction<string[]>) => {
@@ -114,12 +119,13 @@ const Playback = () => {
 
   return (
     <Center h="100%" w="100%" pb={25}>
-      <Stack w="100%" h="100%" align="center">
+      <Stack w="100%" h="100%" align="center" p={20}>
         <Code
           key={`code_highlight-${syntaxHighlight}`}
           language={language || undefined}
           highlight={syntaxHighlight}
-          style={{ width: "100%", height: "100%", backgroundColor: backgroundColor }}
+          style={{ width: "100%", height: "100%", backgroundColor }}
+          codeProps={{ style: { backgroundColor: "transparent" } }}
           colorScheme={colorScheme}
           editable
           onChange={onEditCurrentPage}
@@ -188,6 +194,20 @@ const Playback = () => {
                     Reset
                   </Button>
                 )}
+              </Menu.Item>
+              <Menu.Divider />
+              <Menu.Item>
+                <NumberInput
+                  label="Animation Speed (ms per character)"
+                  value={msPerChar || ""}
+                  min={1}
+                  allowDecimal={false}
+                  onChange={(newValue) => {
+                    if (newValue) {
+                      setMsPerChar(parseFloat(newValue as string));
+                    }
+                  }}
+                />
               </Menu.Item>
               <Menu.Divider />
               <Menu.Item>
