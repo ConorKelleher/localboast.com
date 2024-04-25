@@ -18,7 +18,7 @@
     "@mantine/core": "^7.7.1",
     "@mantine/hooks": "^7.7.1",
     "@tabler/icons-react": "^2.46.0",
-    "localboast": "^0.1.0",
+    "localboast": "file:../localboast/src",
     "websocket": "^1.0.34"
   },
   "devDependencies": {
@@ -55,6 +55,6 @@
   },
   "packageManager": "yarn@4.0.2",
   "resolutions": {
-    "localboast": "portal:/home/conor/workspace/localboast"
+    "localboast": "portal:/home/conor/workspace/localboast/src"
   }
 }

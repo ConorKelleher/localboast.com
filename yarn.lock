@@ -4348,7 +4348,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-react-refresh: "npm:^0.4.3"
     fs: "npm:^0.0.1-security"
-    localboast: "npm:^0.1.0"
+    localboast: "file:../localboast/src"
     mime: "npm:^4.0.0"
     postcss-preset-mantine: "npm:^1.12.3"
     postcss-simple-vars: "npm:^7.0.1"
@@ -4366,12 +4366,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"localboast@portal:/home/conor/workspace/localboast::locator=localboast.com%40workspace%3A.":
+"localboast@portal:/home/conor/workspace/localboast/src::locator=localboast.com%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "localboast@portal:/home/conor/workspace/localboast::locator=localboast.com%40workspace%3A."
-  peerDependencies:
-    react: ^18.2.0
-    react-dom: ^18.2.0
+  resolution: "localboast@portal:/home/conor/workspace/localboast/src::locator=localboast.com%40workspace%3A."
   languageName: node
   linkType: soft
 
