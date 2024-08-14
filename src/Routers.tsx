@@ -1,6 +1,6 @@
 import AppsPage from "Pages/AppsPage";
 import AppsPageIndex from "Pages/AppsPage/AppsPageIndex";
-import ErrorPage, { ErrorPageContent } from "Pages/ErrorPage";
+import ErrorPage from "Pages/ErrorPage";
 import ExternalLink from "Pages/ExternalLink";
 import { ExternalLinkMappings } from "Pages/ExternalLink/constants";
 import HomePage from "Pages/HomePage";

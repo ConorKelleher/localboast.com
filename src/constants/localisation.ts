@@ -21,6 +21,8 @@ export const DEFAULT_LOCALE = {
   policies: "Policies",
   cookiePolicy: "Cookie Policy",
   privacyPolicy: "Privacy Policy",
+  copyEmbed: "Copy Full-Screen Link",
+  copied: "Copied!",
 };
 
 type Key = keyof typeof DEFAULT_LOCALE;

@@ -4,6 +4,7 @@ import { Location, useLocation, useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import usePageTitle from "localboast/hooks/usePageTitle";
 import { capitalize } from "localboast/utils/stringHelpers";
+import copyToClipboard from "localboast/utils/copyToClipboard";
 import useUpdatingRef from "localboast/hooks/useUpdatingRef";
 import * as LocalBoast from "localboast";
 
@@ -121,7 +122,7 @@ const StorybookPage = () => {
       newSearch
     );
     if (onlyHashHasChanged) {
-      navigator.clipboard.writeText(window.location.href.replace(/#.+/, `#${newHash}`));
+      copyToClipboard(window.location.href.replace(/#.+/, `#${newHash}`));
     }
     if (
       newLocation.pathname !== location.pathname ||

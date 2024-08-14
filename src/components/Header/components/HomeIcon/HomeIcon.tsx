@@ -14,7 +14,7 @@ const HomeIcon = () => {
   const [{ onClick: hapticOnClick }, { returning, clicked }] = useHaptic({
     clickMs: 100,
     returnMs: 100,
-    onClick: () => {
+    delayedOnClick: () => {
       navigate(Paths.HomePage);
     },
   });

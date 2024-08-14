@@ -5,11 +5,12 @@ const Paths = {
   LivePage: "live",
   InProgressPage: "wip",
   YouTubePage: "live/YouTube",
-  TwitchPage: "live/twitch",
+  TwitchPage: "live/Twitch",
   TwitchAuthPage: "twitch_auth",
   AppsRoot: "apps",
   EtChatSketch: "sketch",
   Playback: "playback",
+  TwitchPoll: "poll",
   AppsPage: "apps",
 };
 
